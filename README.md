@@ -8,7 +8,7 @@ For a live demo, visit: https://pyrepl.web.app/
 
 ### How to modify this project:
 1. Download Code
-2. Open PyREPLforSPIKE in a terminal and run ```npm install ```. Requires [NodeJS](https://nodejs.org/en/)
+2. Open PyREPLforSPIKE in a terminal and run ```npm install```. Requires [NodeJS](https://nodejs.org/en/)
 3. To start the development server, run ```npm start```.
 4. To build a production version of the project, run ```npm run build```.
 
