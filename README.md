@@ -1,7 +1,7 @@
 # PyREPLforSPIKE
 A web-based PyREPL interface for LEGO Education SPIKE Prime and SPIKE Essential
 
-For a live demo, visit: ***FILL IN URL***
+For a live demo, visit: https://pyrepl.web.app/
 
 ---
 ## Description:
