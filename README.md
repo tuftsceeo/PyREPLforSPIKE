@@ -6,7 +6,7 @@ GitHub Pages Version: https://tuftsceeo.github.io/PyREPLforSPIKE/build/index.htm
 
 ---
 ## Description
-PyREPL for SPIKE is a web based platform to interact with the REPL on a LEGO SPIKE Prime Hub. The application allows users to write MicroPython directly to a SPIKE Hub and log output to a live console using a graphical user interface.
+PyREPL for SPIKE is a web-based platform to interact with the REPL on a LEGO SPIKE Prime Hub. The application allows users to write MicroPython directly to a SPIKE Hub and log output to a live console using a graphical user interface.
 
 
 ---
