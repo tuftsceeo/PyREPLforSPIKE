@@ -22,6 +22,7 @@ PyREPL for SPIKE is a web based platform to interact with the REPL on a LEGO SPI
 
 <img src="https://github.com/tuftsceeo/PyREPLforSPIKE/blob/main/PyREPLTutorial.gif" alt ="PyREPL Tutorial" width=650 />
 
+---
 ### How to modify PyREPL:
 Note: PyREPL was built using [React](https://reactjs.org/)
 1. Download Code

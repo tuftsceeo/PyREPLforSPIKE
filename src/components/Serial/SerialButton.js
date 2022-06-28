@@ -24,7 +24,7 @@ function SerialButton(props) {
 
             {/* RESTART Displayed when SPIKE IS connected */}
             <div className={!props.on ? "hidden" : null}>
-                <Tooltip title="Disconnect Device" placement="top">
+                <Tooltip title="Device Connected" placement="top">
                     <Fab onClick={() => {props.restartClick()}} color={onColor} aria-label="add" size="small">
                         <CableIcon />
                     </Fab>

@@ -228,7 +228,7 @@ function Serial(props) {
     function stripComments(codeArray) {
         let blockCommentMode = false;
         return codeArray.filter((line) => {
-            if (line.length == 0 || line.trim().charAt(0) == "#") {
+            if (line.length === 0 || line.trim().charAt(0) === "#") {
                 return false;
             }
             if (line.length >= 3 && line.includes("'''")) {
@@ -260,14 +260,14 @@ function Serial(props) {
         
         // Detect if code block is ahead, enters block mode and saves
         // the block as one string
-        if (curElement.trim().charAt(curElement.length - 1) == ":") {
+        if (curElement.trim().charAt(curElement.length - 1) === ":") {
             lineNum++;
 
             blockToWrite.unshift(CONTROL_E);
             blockToWrite.push("\r\n");
 
             while (lineNum < codeArray.length && 
-            (codeArray[lineNum].length == 0 ||
+            (codeArray[lineNum].length === 0 ||
             codeArray[lineNum].substring(0,4) === "    "))
             {
                 blockToWrite.push(codeArray[lineNum]);

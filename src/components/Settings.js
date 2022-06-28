@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import InputSlider from "./InputComponents/InputSlider";
 
 // Button Icon Import
 import Tooltip from "@mui/material/Tooltip";
@@ -19,13 +20,11 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 
-// Slider Imports
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
-import TextFieldsIcon from '@mui/icons-material/TextFields';
+
+// Checkbox Import
+import Checkbox from '@mui/material/Checkbox';
 
 
 
@@ -39,9 +38,7 @@ const Input = styled(MuiInput)`
 
 function Settings(props) {
     const [open, setOpen] = React.useState(false);
-    const [tempSettings, setTempSettings] = React.useState(
-        props.settings
-    )
+    const tempSettings = props.settings
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -49,43 +46,7 @@ function Settings(props) {
 
     const handleClose = () => {
         setOpen(false);
-    };
-
-    const handleSave = () => {
-        setOpen(false);
-        console.log(tempSettings);
-        props.setSettings(tempSettings);
-        setTimeout(() => {
-            console.log(props.settings);
-        }, 1000);
-    }
-
-    const [value, setValue] = useState(tempSettings.fontSize);
-
-    const handleSliderChange = (event, newValue) => {
-        setValue(newValue);
-        setTempSettings((prev) => {
-            let settingsCopy = prev;
-            settingsCopy.fontSize = newValue;
-            return settingsCopy;
-        });
-    };
-
-    const handleInputChange = (event) => {
-        setValue(event.target.value === '' ? '' : Number(event.target.value));
-        const value = event.target.value === '' ? '' : Number(event.target.value);
-        setTempSettings((prev) => {
-            let settingsCopy = prev;
-            settingsCopy.fontSize = value;
-            return settingsCopy;
-        });
-    }
-    const handleBlur = () => {
-        if (value < 0) {
-            setValue(0);
-        } else if (value > 50) {
-            setValue(50);
-        }
+        props.onSettingsUpdate()
     };
 
     return (
@@ -121,61 +82,26 @@ function Settings(props) {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                 Settings
             </Typography>
+            {/*
             <Button autoFocus color="inherit" onClick={handleSave}>
-                save
+                Save
             </Button>
+            */}
             </Toolbar>
         </AppBar>
         <List>
-            <ListItem>
-                <ListItemText primary="Set Editor Text Size" />
-                <Box sx={{ width: 250 }}>
-                    <Typography id="input-slider" gutterBottom>
-                        Text Size
-                    </Typography>
-                    <Grid container spacing={2} alignItems="center">
-                        <Grid item>
-                        <TextFieldsIcon />
-                        </Grid>
-                        <Grid item xs>
-                        <Slider
-                            value={typeof value === 'number' ? value : 0}
-                            onChange={handleSliderChange}
-                            aria-labelledby="input-slider"
-                            max={36}
-                            min={1}
-                        />
-                        </Grid>
-                        <Grid item>
-                        <Input
-                            value={value}
-                            size="small"
-                            onChange={handleInputChange}
-                            onBlur={handleBlur}
-                            inputProps={{
-                            step: 1,
-                            min: 1,
-                            max: 36,
-                            type: 'number',
-                            'aria-labelledby': 'input-slider',
-                            }}
-                        />
-                        </Grid>
-                    </Grid>
-                </Box>
-            </ListItem>
-            <Divider />
-            <ListItem >
-                <ListItemText
-                    primary="Open WebSerial Automatically"
-                    secondary="Off"
-                />
-            </ListItem>
+            <InputSlider 
+                input={tempSettings.fontSize}
+                onChange={(newFontSize) => {
+                    tempSettings.fontSize = newFontSize;
+                }}
+            />
             <Divider />
             <ListItem >
                 <ListItemText
                     primary="Enable Dark Mode"
-                    secondary="Off"
+                />
+                <Checkbox
                 />
             </ListItem>
         </List>

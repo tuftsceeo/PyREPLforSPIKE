@@ -125,7 +125,6 @@ function App() {
         return localStorage.getItem(key);
     }
 
-
     // Returns the entire App with all rendered components
     return (
         <div>
@@ -134,6 +133,11 @@ function App() {
                 <Settings 
                     settings={settings}
                     setSettings={(newSettings) => setSettings(newSettings)} 
+                    onSettingsUpdate={() => {
+                        const curIDE = activeIDE;
+                        setActiveIDE(0);
+                        setActiveIDE(curIDE);
+                    }}
                 />
             </div>
             <div className="grid grid-cols-2">
