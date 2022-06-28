@@ -11,7 +11,7 @@ function Console(props) {
     });
 
     return (
-        <div className="border border-black overflow-scroll h-full max-h-96 bg-white">
+        <div style={{maxHeight: "450px"}} className="resize-none border border-black overflow-scroll bg-white">
             <p 
             className="text-decoration-line: underline text-center">
                     Console

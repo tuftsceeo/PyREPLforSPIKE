@@ -12,6 +12,7 @@ function IDE(props) {
                         onEdit={props.onEdit} 
                         id={props.id + "console"} 
                         code={props.code}
+                        settings={props.settings}
                     /> 
                 </div>
                 

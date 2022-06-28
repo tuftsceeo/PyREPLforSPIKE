@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import AceEditor from 'react-ace';
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-github";
+import Settings from "@mui/icons-material/Settings";
 
 function CodeEditor(props) {
 
-    const initCode = props.code;
-
-    const [curCode, setCurCode] = useState(initCode);
-    console.log(curCode);
+    //const [curCode, setCurCode] = useState(initCode);
+    console.log(props.settings.fontSize);
+    const [editorSettings, setEditorSettings] = useState(props.settings);
 
     return (        
         <div className="border border-black" id={props.id}>
@@ -18,9 +18,10 @@ function CodeEditor(props) {
                     onChange={props.onEdit}
                     mode="python"
                     theme="github"
-                    width="500px"
-                    height={(window.innerHeight * 0.7) + "px"}
+                    width={editorSettings.editorWidth + "px"}
+                    height={editorSettings.editorHeight + "px"}
                     value={props.code} 
+                    fontSize={editorSettings.fontSize}
                 />
             }
         </div>

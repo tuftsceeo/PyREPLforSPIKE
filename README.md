@@ -7,13 +7,25 @@ GitHub Pages Version: https://tuftsceeo.github.io/PyREPLforSPIKE/build/index.htm
 ---
 ## Description:
 
-### How to modify this project:
+
+---
+## Using/Modifying PyREPL
+### How to use PyREPL
+1. Open the [PyREPL Web App](https://pyrepl.web.app/) on a supported web browser.
+    * Supported browsers: Google Chrome, Microsoft Edge, Opera.
+2. Connect your SPIKE Prime or other MicroPython device to PyREPL by clicking the red button on the upper right hand side of the window.
+    * The application currently supports wire (USB) and bluetooth connections. 
+3. Write MicroPython code using the text editor on the left half of the screen.
+    * [Link to SPIKE Prime Documentation](https://tufts-cr-for-lego.codingrooms.com/documentation/spike_prime_python_knowledge_base#top)
+4. Run your code on SPIKE using the blue play button on the upper right hand side of the window.
+
+### How to modify PyREPL:
+Note: PyREPL was built using [React](https://reactjs.org/)
 1. Download Code
 2. Open PyREPLforSPIKE in a terminal and run ```npm install```. Requires [NodeJS](https://nodejs.org/en/)
 3. To start the development server, run ```npm start```.
 4. To build a production version of the project, run ```npm run build```.
 
-***FILL IN DESCRIPTION/INFORMATION***
 
 ---
 
