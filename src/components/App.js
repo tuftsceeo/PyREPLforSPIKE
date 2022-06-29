@@ -138,6 +138,10 @@ function App() {
                         setActiveIDE(0);
                         setActiveIDE(curIDE);
                     }}
+                    clearConsole={
+                        setConsoleOutput
+                    }
+                    
                 />
             </div>
             <div className="grid grid-cols-2">

@@ -1,23 +1,7 @@
 import React, {useState} from "react";
-
-// Button Icon Import
-import Tooltip from "@mui/material/Tooltip";
-import SettingsIcon from '@mui/icons-material/Settings';
-import Fab from '@mui/material/Fab';
-
-// Popup Imports
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
 import ListItemText from '@mui/material/ListItemText';
 import ListItem from '@mui/material/ListItem';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
 
 // Slider Imports
 import { styled } from '@mui/material/styles';
@@ -55,7 +39,10 @@ function InputSlider(props) {
     return (
         <div>
             <ListItem>
-                <ListItemText primary="Set Editor Text Size" />
+                <ListItemText 
+                    primary="Set Editor Text Size"
+                    secondary="Reload tab to view changes"
+                 />
                 <Box sx={{ width: 250 }}>
                     <Typography id="input-slider" gutterBottom>
                         Text Size

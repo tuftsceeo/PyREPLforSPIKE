@@ -189,11 +189,13 @@ function Serial(props) {
 
     function runCurrentCode() {
         console.log("RUNNING!")
+        let currentCode = props.getCurrentCode()
+        console.log(currentCode)
 
         // Adds appropriate spaces at end of code to
         // make sure the Python interpreter knows to run
         // the code.
-        let currentCode = props.getCurrentCode();
+        //let currentCode = props.getCurrentCode();
         // Windows adds an extra \r along with \n
         let codeArray = currentCode.split("\n");
         
@@ -291,8 +293,10 @@ function Serial(props) {
     
     useEffect(() => {
         const handleEsc = (event) => {
-            if (event.keyCode === 13 && event.ctrlKey) 
+            if (event.keyCode === 13 && event.ctrlKey){
                 runCurrentCode();
+            } 
+                
         };
         window.addEventListener('keydown', handleEsc);
 

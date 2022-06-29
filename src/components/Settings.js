@@ -26,6 +26,10 @@ import MuiInput from '@mui/material/Input';
 // Checkbox Import
 import Checkbox from '@mui/material/Checkbox';
 
+// Clear Console Button icon
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Snackbar } from "@mui/material";
+
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -37,7 +41,19 @@ const Input = styled(MuiInput)`
 `;
 
 function Settings(props) {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [snackOpen, setSnackOpen] = useState(false);
+    const [snackMessage, setSnackMessage] = useState("")
+
+    function openSnack(message) {
+        setSnackMessage(message);
+        setSnackOpen(true);
+    }
+
+    function closeSnack() {
+        setSnackOpen(false);
+    }
+
     const tempSettings = props.settings
 
     const handleClickOpen = () => {
@@ -100,12 +116,36 @@ function Settings(props) {
             <ListItem >
                 <ListItemText
                     primary="Enable Dark Mode"
+                    secondary="Coming Soon!"
                 />
                 <Checkbox
                 />
             </ListItem>
+            <Divider />
+            <ListItem >
+                <ListItemText
+                    primary="Clear Console Output"
+                />
+                <Button 
+                    variant="contained" 
+                    startIcon={<DeleteIcon />}
+                    onClick={() => {
+                        openSnack("Console Output Cleared")
+                        props.clearConsole("")
+                    }}
+                >
+                    Clear Console
+                </Button>
+               
+            </ListItem>
         </List>
         </Dialog>
+        <Snackbar
+            open={snackOpen}
+            autoHideDuration={5000}
+            onClose={closeSnack}
+            message={snackMessage}
+        />
     </div>
     );
     
