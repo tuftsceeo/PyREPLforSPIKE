@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Tab from "./Tab";
 
@@ -8,19 +8,20 @@ import TextPopup from "./TextPopup";
 function Tabs(props) {
 
     const [activeTab, setActiveTab] = useState(0);
-    const LOCALSTORAGE_KEY = "appData"; 
-
     let tabsInitValue = [{
         color: "primary",
         name: "Main",
         onClick: null
     }];
+    const [tabs, setTabs] = useState(tabsInitValue);
+
+    const LOCALSTORAGE_KEY = "appData"; 
 
     const ls = getLocalStorage()
     if (ls != null) {
         const lsJSON = JSON.parse(ls)
         Object.values(lsJSON).forEach((value, key) => {
-            if (key != 0) {
+            if (key !== 0) {
                 tabsInitValue.push({
                     color: "inherit",
                     name: value.name,
@@ -30,9 +31,6 @@ function Tabs(props) {
             
         });
     }
-
-
-    const [tabs, setTabs] = useState(tabsInitValue);
 
     
 
@@ -73,7 +71,27 @@ function Tabs(props) {
         return localStorage.getItem(LOCALSTORAGE_KEY);
     }
 
-    
+
+    // 97 - 105 are keys for numbers 1-9
+    useEffect(() => {
+        const key0 = 48; // key number for 0 number key
+        const handleIDESwitch = (event) => {
+            for (let i = 1; i <= 9; i++) {
+                console.log(event.keyCode)
+                if (event.keyCode === (key0 + i) && event.altKey 
+                && i < tabs.length + 1) {
+                    console.log("World")
+                    switchTabs(i-1);
+                }
+            }
+                
+        };
+        window.addEventListener('keydown', handleIDESwitch);
+
+        return () => {
+            window.removeEventListener('keydown', handleIDESwitch);
+        };
+    }, []);
 
     return (
         <div>
