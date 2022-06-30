@@ -10,7 +10,7 @@
  * 
  */ 
 
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import Header from "./Header";
 import IDE from "./IDE";
 import Tabs from"./Tabs/Tabs";
@@ -64,7 +64,8 @@ function App() {
     const [editors, setEditors] = useState(editorInitialValue);
     const [activeIDE, setActiveIDE] = useState(0);
     const [consoleOutput, setConsoleOutput] = useState("");
-    const [consoleInput, setConsoleInput] = useState("");
+
+    console.log(settings)
 
     // BUG: Generate unique IDs (generator or editor name)
     // so we can later delete REPLs
@@ -124,9 +125,6 @@ function App() {
         return localStorage.getItem(key);
     }
 
-
-   
-
     // Returns the entire App with all rendered components
     return (
         <div>
@@ -148,17 +146,10 @@ function App() {
             </div>
             <div className="grid grid-cols-2">
                 <div className="flex mx-2 justify-center">
-                    <Tabs 
-                        switchIDE={setActiveIDE} 
-                        addREPL={addREPL} 
-                    />
+                    <Tabs switchIDE = {setActiveIDE} addREPL={addREPL} />
                 </div>
                 <div>
-                    <Serial 
-                        currentCode={editors[activeIDE].code}
-                        getCurrentCode={getCurrentCode} 
-                        exportConsole={pipeOutputToConsole} 
-                    />
+                    <Serial getCurrentCode={getCurrentCode} exportConsole={pipeOutputToConsole} />
                 </div>
             </div>
 
@@ -172,15 +163,11 @@ function App() {
                             content={consoleOutput} 
                             code={editor.code} 
                             onEdit={editCurrentFile}
-                            onConsoleEdit={setConsoleInput}
-                            consoleInput={consoleInput}
                             settings={settings}
                         />
                     )
                 }) 
             }
-
-    
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from "react";
+import React, {useState, useEffect} from "react";
 import SerialButton from "./SerialButton";
 import APIButton from "./APIButton";
 import Tooltip from "@mui/material/Tooltip";
@@ -188,7 +188,8 @@ function Serial(props) {
     }
 
     function runCurrentCode() {
-        let currentCode = props.currentCode;
+        console.log("RUNNING!")
+        let currentCode = props.getCurrentCode()
         console.log(currentCode)
 
         // Adds appropriate spaces at end of code to
@@ -219,8 +220,8 @@ function Serial(props) {
                 indentedCodeArray.push(...blockToWrite);
                 indentedCodeArray.push("\r\n");
             }
+            
         }
-
         writeToPort([...indentedCodeArray]);
     }
 
@@ -289,23 +290,20 @@ function Serial(props) {
 
     // When CRTL + ENTER is pressed, code is run
     // https://stackoverflow.com/questions/37440408/how-to-detect-esc-key-press-in-react-and-how-to-handle-it
-
-    const enterFunction = ((event) => {
-        if (event.keyCode === 13 && event.altKey) {
-            console.log(props.currentCode)
-            runCurrentCode();
-        }
-    });
     
     useEffect(() => {
-        document.addEventListener("keydown", enterFunction, false);
-    
+        const handleEsc = (event) => {
+            if (event.keyCode === 13 && event.ctrlKey){
+                runCurrentCode();
+            } 
+                
+        };
+        window.addEventListener('keydown', handleEsc);
+
         return () => {
-          document.removeEventListener("keydown", enterFunction, false);
+            window.removeEventListener('keydown', handleEsc);
         };
     }, []);
-    
-    
     
 
     return (

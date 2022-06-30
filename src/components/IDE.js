@@ -19,12 +19,7 @@ function IDE(props) {
             </div>
 
             <div className="mx-4">
-                <Console 
-                    id={props.id + "console"} 
-                    content={props.content} 
-                    onConsoleEdit={props.onConsoleEdit}
-                    consoleInput={props.consoleInput}
-                />
+                <Console id={props.id + "console"} content={props.content} />
             </div>
             
         </div>
