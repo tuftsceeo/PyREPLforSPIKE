@@ -77,10 +77,8 @@ function Tabs(props) {
         const key0 = 48; // key number for 0 number key
         const handleIDESwitch = (event) => {
             for (let i = 1; i <= 9; i++) {
-                console.log(event.keyCode)
                 if (event.keyCode === (key0 + i) && event.altKey 
                 && i < tabs.length + 1) {
-                    console.log("World")
                     switchTabs(i-1);
                 }
             }

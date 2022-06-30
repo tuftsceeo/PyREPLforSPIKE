@@ -16,7 +16,6 @@ import IDE from "./IDE";
 import Tabs from"./Tabs/Tabs";
 import Serial from "./Serial/Serial"
 import Settings from "./Settings";
-import ConsoleInput from "./IDE/ConsoleInput";
 
 
 function App() {
@@ -66,8 +65,6 @@ function App() {
     const [activeIDE, setActiveIDE] = useState(0);
     const [consoleOutput, setConsoleOutput] = useState("");
     const [consoleInput, setConsoleInput] = useState("");
-
-    console.log(settings)
 
     // BUG: Generate unique IDs (generator or editor name)
     // so we can later delete REPLs
@@ -128,6 +125,8 @@ function App() {
     }
 
 
+   
+
     // Returns the entire App with all rendered components
     return (
         <div>
@@ -174,6 +173,7 @@ function App() {
                             code={editor.code} 
                             onEdit={editCurrentFile}
                             onConsoleEdit={setConsoleInput}
+                            consoleInput={consoleInput}
                             settings={settings}
                         />
                     )

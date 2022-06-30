@@ -11,7 +11,7 @@ function Console(props) {
 
     return (
         <div>
-            <div style={{maxHeight: "360px"}} className="resize-none border border-black overflow-scroll bg-white">
+            <div style={{maxHeight: "375px"}} className="resize-none border border-black overflow-scroll bg-white">
                 <p 
                     className="text-decoration-line: underline text-center"
                 >
@@ -29,7 +29,9 @@ function Console(props) {
             
             </div>
             <div>
-                <ConsoleInput />
+                <ConsoleInput
+                    onConsoleEdit={props.onConsoleEdit}
+                />
             </div>
         </div>
         

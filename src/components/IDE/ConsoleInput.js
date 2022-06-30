@@ -14,10 +14,12 @@ function ConsoleInput(props) {
             noValidate
             autoComplete="off"
             >
-            <TextField 
-                id="outlined-basic" 
+            <TextField  
                 label="Console Input" 
-                variant="outlined" 
+                variant="outlined"
+                id="consoleInput"
+                onChange={() => props.onConsoleEdit()} 
+                value={"Does Not Work Yet"}
             />
             </Box>
         </div>

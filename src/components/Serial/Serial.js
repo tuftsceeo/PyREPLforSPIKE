@@ -291,7 +291,6 @@ function Serial(props) {
     // https://stackoverflow.com/questions/37440408/how-to-detect-esc-key-press-in-react-and-how-to-handle-it
 
     const enterFunction = ((event) => {
-        console.log(props.currentCode)
         if (event.keyCode === 13 && event.altKey) {
             console.log(props.currentCode)
             runCurrentCode();
