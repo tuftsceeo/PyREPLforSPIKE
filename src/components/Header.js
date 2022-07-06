@@ -6,7 +6,7 @@ function Header() {
         <div className="text-center my-4">
             <Typography variant="h3" component="div" gutterBottom>
             
-            SPIKE PyREPL
+            Web PyREPL
         
             </Typography>
         </div>

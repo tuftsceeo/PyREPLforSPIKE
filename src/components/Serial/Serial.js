@@ -6,6 +6,7 @@ import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import Fab from '@mui/material/Fab';
+import { current } from "daisyui/src/colors";
 
 
 const VENDOR_ID = 0x0694; // LEGO SPIKE Prime Hub
@@ -115,8 +116,9 @@ function Serial(props) {
             console.error("Error: Writer Not Defined");
         }
         else {
+            console.log("----------------WRITING TO MICROPROCESSOR----------------")
+            console.log(lines)
             await writer.write(ENTER)
-
             if (typeof(lines) === "string")
                 await writer.write(lines);
             // Writes code one line at a time
@@ -132,6 +134,8 @@ function Serial(props) {
             if (stopCode) {
                 setStopCode(false);
             }
+
+            console.log("----------------FINISHED WRITING----------------")
 
         }
         
@@ -188,9 +192,18 @@ function Serial(props) {
     }
 
     function runCurrentCode() {
-        console.log("RUNNING!")
         let currentCode = props.getCurrentCode()
-        console.log(currentCode)
+
+        if (!currentCode.includes("\n")) {
+            writeToPort(currentCode);
+            return;
+        }
+        else {
+            console.log(currentCode)
+        }
+
+        // Old code that ran user input line by line
+        /*
 
         // Adds appropriate spaces at end of code to
         // make sure the Python interpreter knows to run
@@ -200,7 +213,7 @@ function Serial(props) {
         let codeArray = currentCode.split("\n");
         
         codeArray = stripComments(codeArray);
-        console.log(codeArray);
+
 
         let indentedCodeArray = [];
         for (let i = 0; i < codeArray.length; i++) {
@@ -208,13 +221,12 @@ function Serial(props) {
 
             i = codeBlockObj.newLineNumber;
             let blockToWrite = codeBlockObj.codeBlock;
-            console.log(blockToWrite);
 
             // If code has indent, enter paste mode and insert block using
             // CTRL-E and CRTL-D
             if (blockToWrite.length > 1) {
                 indentedCodeArray.push(...blockToWrite);
-                indentedCodeArray.push("\r\n");
+                i--;
             }
             else {
                 indentedCodeArray.push(...blockToWrite);
@@ -222,7 +234,14 @@ function Serial(props) {
             }
             
         }
-        writeToPort([...indentedCodeArray]);
+        */
+
+        // Newer code to create a python file and run
+        //currentCode = currentCode.replace('\r', '')
+
+        writeToPort(CONTROL_E)
+        writeToPort(currentCode);
+        writeToPort(CONTROL_D)
     }
 
     // Removes all comments from code before parsing
