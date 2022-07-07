@@ -20,6 +20,37 @@ const CONTROL_D = '\x04'; // CTRL-D character
 const CONTROL_E = '\x05'; // CTRL-E character
 const CONTROL_F = '\x06'; // CTRL-F character
 const ENTER = '\r\n' // NEWLINE character
+const TAB = '\x09' // TAB character
+
+// CONTROL + (letter) ASCII characters
+const CONTROL_KEYS = {
+    'a': '\x01',
+    'b': '\x02',
+    'c': '\x03',
+    'd': '\x04',
+    'e': '\x05',
+    'f': '\x06',
+    'g': '\x07',
+    'h': '\x08',
+    'i': '\x09',
+    'j': '\x0A',
+    'k': '\x0B',
+    'l': '\x0C',
+    'm': '\x0D',
+    'n': '\x0E',
+    'o': '\x0F',
+    'p': '\x10',
+    'q': '\x11',
+    'r': '\x12',
+    's': '\x13',
+    't': '\x14',
+    'u': '\x15',
+    'v': '\x16',
+    'w': '\x17',
+    'x': '\x18',
+    'y': '\x19',
+    'z': '\x1A',
+}
 
 const docsLink = "https://tufts-cr-for-lego.codingrooms.com/documentation/spike_prime_python_knowledge_base#top";
 
@@ -315,6 +346,42 @@ function Serial(props) {
             if (event.keyCode === 13 && event.ctrlKey){
                 runCurrentCode();
             } 
+
+            else if (event.key === "Enter") {
+                setTimeout(() => {
+                    if (props.newREPLEntry) {
+                        props.setNewREPLEntry(false);
+                        writeToPort(props.consoleInput);
+                        console.log(props.consoleInput);
+                        props.setConsoleInput("")
+                    }
+                }, 10);
+            }
+
+            else if (event.key === "Tab") {
+                setTimeout(() => {
+                    if (props.newREPLEntry) {
+                        props.setNewREPLEntry(false);
+                        writeToPort(TAB);
+                        console.log(props.consoleInput);
+                        props.setConsoleInput("")
+                    }
+                }, 10);
+            }
+
+            /*
+            else if (event.ctrlKey) {
+                console.log(event.key)
+                setTimeout(() => {
+                    if (props.newREPLEntry) {
+                        props.setNewREPLEntry(false);
+                        writeToPort(TAB);
+                        console.log(props.consoleInput);
+                        props.setConsoleInput("")
+                    }
+                }, 10);
+            }
+            */
                 
         };
         window.addEventListener('keydown', handleEsc);
@@ -322,7 +389,7 @@ function Serial(props) {
         return () => {
             window.removeEventListener('keydown', handleEsc);
         };
-    }, []);
+    }, [props]);
     
 
     return (

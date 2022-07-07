@@ -29,7 +29,11 @@ function Console(props) {
             
             </div>
             <div>
-                <ConsoleInput />
+                <ConsoleInput 
+                    consoleInput={props.consoleInput}
+                    setConsoleInput={props.setConsoleInput}
+                    setNewREPLEntry={props.setNewREPLEntry}
+                />
             </div>
         </div>
     )

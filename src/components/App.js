@@ -16,9 +16,25 @@ import IDE from "./IDE";
 import Tabs from"./Tabs/Tabs";
 import Serial from "./Serial/Serial"
 import Settings from "./Settings";
+import ChromeCheck from "./ChromeCheck";
+
+import { browserName, browserVersion } from "react-device-detect";
 
 
 function App() {
+    // Check if browser is valid -- chrome, edge, or opera
+    function isValidBrowser(browser, version) {
+        console.log(version > 89)
+        if ((browser === "Chrome" || browser === "Edge") && version > 89) {
+            return true;
+        }
+        else if (browser === "Opera" && version > 75) {
+            return true;
+        }
+        return false;
+    }
+    const validBrowser = isValidBrowser(browserName, browserVersion);
+
     // Initialization Code
     // Calls saved editor data from LocalStorage, if avaliable
     // and initializes the website with those values.
@@ -65,7 +81,8 @@ function App() {
     const [activeIDE, setActiveIDE] = useState(0);
     const [consoleOutput, setConsoleOutput] = useState("");
 
-    console.log(settings)
+    const [consoleInput, setConsoleInput] = useState("");
+    const [newREPLEntry, setNewREPLEntry] = useState(false);
 
     // BUG: Generate unique IDs (generator or editor name)
     // so we can later delete REPLs
@@ -128,46 +145,62 @@ function App() {
     // Returns the entire App with all rendered components
     return (
         <div>
-            <Header />
-            <div className="absolute right-4 top-4">
-                <Settings 
-                    settings={settings}
-                    setSettings={(newSettings) => setSettings(newSettings)} 
-                    onSettingsUpdate={() => {
-                        const curIDE = activeIDE;
-                        setActiveIDE(0);
-                        setActiveIDE(curIDE);
-                    }}
-                    clearConsole={
-                        setConsoleOutput
-                    }
-                    
-                />
-            </div>
-            <div className="grid grid-cols-2">
-                <div className="flex mx-2 justify-center">
-                    <Tabs switchIDE = {setActiveIDE} addREPL={addREPL} />
-                </div>
-                <div>
-                    <Serial getCurrentCode={getCurrentCode} exportConsole={pipeOutputToConsole} />
-                </div>
-            </div>
-
-            {editors.filter((editor, index) => {
-                    return index === activeIDE;
-                }).map((editor) => {
-                    return (
-                        <IDE 
-                            key={editor.id} 
-                            id={editor.id} 
-                            content={consoleOutput} 
-                            code={editor.code} 
-                            onEdit={editCurrentFile}
+            <ChromeCheck
+                className={validBrowser ? "hidden" : ""}
+            />
+            
+            <div className={validBrowser ? "" : "hidden"}>
+                <Header />
+                    <div className="absolute right-4 top-4">
+                        <Settings 
                             settings={settings}
+                            setSettings={(newSettings) => setSettings(newSettings)} 
+                            onSettingsUpdate={() => {
+                                const curIDE = activeIDE;
+                                setActiveIDE(0);
+                                setActiveIDE(curIDE);
+                            }}
+                            clearConsole={
+                                setConsoleOutput
+                            }
+                            
                         />
-                    )
-                }) 
-            }
+                    </div>
+                    <div className="grid grid-cols-2">
+                        <div className="flex mx-2 justify-center">
+                            <Tabs switchIDE = {setActiveIDE} addREPL={addREPL} />
+                        </div>
+                        <div>
+                            <Serial 
+                                getCurrentCode={getCurrentCode} 
+                                exportConsole={pipeOutputToConsole} 
+                                newREPLEntry={newREPLEntry}
+                                setNewREPLEntry={setNewREPLEntry}
+                                consoleInput={consoleInput}
+                                setConsoleInput={setConsoleInput}
+                            />
+                        </div>
+                    </div>
+
+                    {editors.filter((editor, index) => {
+                            return index === activeIDE;
+                        }).map((editor) => {
+                            return (
+                                <IDE 
+                                    key={editor.id} 
+                                    id={editor.id} 
+                                    content={consoleOutput} 
+                                    code={editor.code} 
+                                    onEdit={editCurrentFile}
+                                    settings={settings}
+                                    consoleInput={consoleInput}
+                                    setConsoleInput={setConsoleInput}
+                                    setNewREPLEntry={setNewREPLEntry}
+                                />
+                            )
+                        }) 
+                    }
+            </div>
         </div>
     );
 }
