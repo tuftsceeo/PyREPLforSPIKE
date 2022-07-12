@@ -341,7 +341,7 @@ function Serial(props) {
     useEffect(() => {
         const handleEsc = (event) => {
             if (event.shiftKey && event.key === "Enter"){
-                console.log("RUN CODE");
+                event.preventDefault();
                 writeToPort(CONTROL_E)
                 writeToPort(props.getCurrentCode());
                 writeToPort(CONTROL_D);
