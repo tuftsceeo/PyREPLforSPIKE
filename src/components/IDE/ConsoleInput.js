@@ -6,25 +6,47 @@ import React, {useEffect, useState, useRef} from "react";
 
 function ConsoleInput(props) {
 
-    const [input, setInput] = useState(props.consoleInput);
+    const [upStack, setUpStack] = useState([]);
+    const [downStack, setDownStack] = useState([]);
+
     const ref = useRef(null);
     const TAB = '\x09'
 
     useEffect(() => {
         const keyDownHandler = event => {
             console.log('User pressed: ', event.key);
-    
+            
+            
             if (event.key === 'Enter' && document.activeElement == ref.current) {
+                console.log(upStack)
                 event.preventDefault();
-                console.log("changed")
+                
+                setUpStack((prev) => {
+                    return [...prev, props.consoleInput]
+                });
+                
                 props.setNewREPLEntry(true);
             }
+            
 
             // Handled in Serial.js
             else if ((event.key === "Tab" || event.key == "Control") && document.activeElement == ref.current) {
                 event.preventDefault();
                 props.setNewREPLEntry(true);
             }
+            
+            // Up/Down arrow implementation
+            else if (event.key === "ArrowUp" && upStack.length > 0) {
+                event.preventDefault();
+                setDownStack((prev) => [...prev, props.consoleInput]);
+                props.setConsoleInput(upStack[upStack.length - 1])
+                setUpStack((prev) => {
+                    prev.filter((element, index) => {
+                        return index != prev.length - 1
+                    })
+                })
+            }
+            
 
         };
     
@@ -34,6 +56,7 @@ function ConsoleInput(props) {
           document.removeEventListener('keydown', keyDownHandler);
         };
     }, []);
+    
 
     return (
         <div className={"flex justify-start my-2"} >
@@ -48,7 +71,6 @@ function ConsoleInput(props) {
             
             <TextField  
                 label="Console Input" 
-                variant="outlined"
                 id="consoleInput"
                 onChange={(event) => {
                     const newInput = event.target.value;
@@ -57,6 +79,7 @@ function ConsoleInput(props) {
                     }
                     props.setConsoleInput(newInput);
                 }} 
+                variant="filled"
                 value={props.consoleInput}
                 inputRef={ref}
                 

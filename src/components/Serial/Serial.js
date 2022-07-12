@@ -6,7 +6,6 @@ import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import Fab from '@mui/material/Fab';
-import { current } from "daisyui/src/colors";
 
 
 const VENDOR_ID = 0x0694; // LEGO SPIKE Prime Hub
@@ -149,7 +148,6 @@ function Serial(props) {
         else {
             console.log("----------------WRITING TO MICROPROCESSOR----------------")
             console.log(lines)
-            await writer.write(ENTER)
             if (typeof(lines) === "string")
                 await writer.write(lines);
             // Writes code one line at a time
@@ -160,7 +158,6 @@ function Serial(props) {
                     }
                 });
             }
-            writer.write(ENTER)
 
             if (stopCode) {
                 setStopCode(false);
@@ -316,7 +313,7 @@ function Serial(props) {
             lineNum++;
 
             blockToWrite.unshift(CONTROL_E);
-            blockToWrite.push("\r\n");
+            //blockToWrite.push("\r\n");
 
             while (lineNum < codeArray.length && 
             (codeArray[lineNum].length === 0 ||
@@ -343,8 +340,11 @@ function Serial(props) {
     
     useEffect(() => {
         const handleEsc = (event) => {
-            if (event.keyCode === 13 && event.ctrlKey){
-                runCurrentCode();
+            if (event.shiftKey && event.key === "Enter"){
+                console.log("RUN CODE");
+                writeToPort(CONTROL_E)
+                writeToPort(props.getCurrentCode());
+                writeToPort(CONTROL_D);
             } 
 
             else if (event.key === "Enter") {
@@ -352,7 +352,7 @@ function Serial(props) {
                     if (props.newREPLEntry) {
                         props.setNewREPLEntry(false);
                         writeToPort(props.consoleInput);
-                        console.log(props.consoleInput);
+                        writeToPort(ENTER);
                         props.setConsoleInput("")
                     }
                 }, 10);
