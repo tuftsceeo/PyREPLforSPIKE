@@ -164,7 +164,7 @@ function App() {
             />
 
             <Welcome
-                className={currentPage === "welcome" ? "" : "hidden"}
+                className={validBrowser && (currentPage === "welcome") ? "" : "hidden"}
                 welcomed={welcomed}
             />
             

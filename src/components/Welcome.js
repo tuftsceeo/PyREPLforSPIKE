@@ -1,6 +1,9 @@
 import React, {useState} from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
+import ceeo from "../img/ceeo.png";
+import { isWindows } from "react-device-detect";
+
 
 function Welcome(props) {
     const [guestWarning, setGuestWarning] = useState(false);
@@ -16,6 +19,8 @@ function Welcome(props) {
         }
     }
 
+    const ratio = window.innerWidth / 200;
+
     return (
         <div className={props.className}>
             <h1 className="m-4 text-4xl font-semibold text-center">Welcome to Web PyREPL!</h1>
@@ -23,7 +28,7 @@ function Welcome(props) {
             <div className="grid grid-cols-2">
                 <div className="p-2 m-4">
                     <div className="mb-8">
-                        <h3 className="text-xl text-center block">Continue as an Guest user</h3>
+                        <h3 className="text-xl text-center block">Continue as a Guest user</h3>
                         <p className="block mx-8 my-4">Your code will be saved to your browser, but your code will be deleted if you clear your cache/browser history. You are responsible for maintaining a backup for all of your code.</p>
                     </div>
                     <div className="flex justify-center my-4">
@@ -41,6 +46,17 @@ function Welcome(props) {
                         <Button variant="contained">Sign In with Google</Button>
                     </div>
                 </div>
+            </div>
+            <div className="">
+                <a className="flex justify-center my-12" href="https://ceeo.tufts.edu/" alt="Tufts CEEO Website">
+                    <img 
+                        src={ceeo}  
+                        alt="Tufts Center for Engineering Education and Outreach" 
+                        style={{maxWidth: "35%", height: "auto"}}
+                        className=""
+                    />
+                </a>
+                
             </div>
             <Dialog
                 open={guestWarning}
