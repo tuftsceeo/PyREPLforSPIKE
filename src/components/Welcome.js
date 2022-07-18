@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
 import ceeo from "../img/ceeo.png";
-import { isWindows } from "react-device-detect";
+import { signInWithGoogle, signInWithGitHub } from "./Firebase/SignIn";
 
 
 function Welcome(props) {
@@ -39,22 +39,41 @@ function Welcome(props) {
 
                 <div className="p-2 m-4">
                     <div className="mb-8">
-                        <h3 className="text-xl text-center block">Sign In with Google</h3>
+                        <h3 className="text-xl text-center block">Sign In with Google or GitHub</h3>
                         <p className="block mx-8 my-4">Code will be saved to your browser and backups will be stored on our servers. You have the option to manually push new code updates to your account that will be saved to the cloud.</p>
                     </div>
-                    <div className="flex justify-center my-4">
-                        <Button variant="contained">Sign In with Google</Button>
+                    <div className="flex justify-center -my-4">
+                        <div className="inline-block mx-4">
+                            <div className="flex justify-center my-4">
+                                <Button 
+                                    variant="contained"
+                                    onClick={() => signInWithGoogle(() => handleClose(true))}
+                                >Sign In with Google</Button>
+                            </div>
+                        </div>
+                        <div className="inline-block mx-4">
+                            <div className="flex justify-center my-4">
+                                <Button 
+                                    variant="contained"
+                                    onClick={() => signInWithGitHub(() => handleClose(true))}
+                                >Sign In with GitHub</Button>
+                            </div>
+                        </div>
                     </div>
+                    
+                    
                 </div>
             </div>
             <div className="">
                 <a className="flex justify-center my-12" href="https://ceeo.tufts.edu/" alt="Tufts CEEO Website">
+                    {/*
                     <img 
                         src={ceeo}  
                         alt="Tufts Center for Engineering Education and Outreach" 
                         style={{maxWidth: "35%", height: "auto"}}
                         className=""
                     />
+                    */}
                 </a>
                 
             </div>

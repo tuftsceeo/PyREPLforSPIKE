@@ -5,8 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import  { useCollectionData } from 'react-firebase-hooks/firestore'
 import { getFirestore, doc, getDoc, setDoc, collection, query, orderBy, limit, Timestamp } from 'firebase/firestore';
 import { initializeApp } from '@firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-
+import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider  } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBj_GV9lYp0Ky39SpLmeCC8bGVIlKJEmuA",
@@ -18,9 +17,15 @@ const firebaseConfig = {
     measurementId: "G-WX7BNYZCKV"
 };
 
-const app = initializeApp(firebaseConfig);
-const firestore = getFirestore(app);
-const auth = getAuth(app);
+export const app = initializeApp(firebaseConfig);
+export const firestore = getFirestore(app);
+export const auth = getAuth(app);
 
-const provider = new GoogleAuthProvider();
-const [user] = useAuthState(auth);
+export const googleProvider = new GoogleAuthProvider();
+export const githubProvider = new GithubAuthProvider();
+
+
+export function User() {
+    const [user] = useAuthState(auth);
+    return (user);
+}
