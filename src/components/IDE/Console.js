@@ -6,7 +6,13 @@ function Console(props) {
     const scrollRef = useRef(null);
 
     useEffect(() => {
-        scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+        try {
+            scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+        catch(e) {
+            console.log("cannot scroll to bottom of console");
+        }
+        
     });
 
     return (

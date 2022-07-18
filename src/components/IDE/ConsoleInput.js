@@ -80,7 +80,7 @@ function ConsoleInput(props) {
             <Box
             component="form"
             sx={{
-                '& > :not(style)': { m: 1, width: '69ch' },
+                '& > :not(style)': { m: 1, width: (Math.floor(window.innerWidth/18.5)) + 'ch' },
             }}
             noValidate
             autoComplete="off"

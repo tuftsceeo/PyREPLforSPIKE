@@ -17,6 +17,7 @@ import Tabs from"./Tabs/Tabs";
 import Serial from "./Serial/Serial"
 import Settings from "./Settings";
 import ChromeCheck from "./ChromeCheck";
+import Welcome from "./Welcome";
 
 import { browserName, browserVersion } from "react-device-detect";
 
@@ -83,6 +84,20 @@ function App() {
     const [consoleInput, setConsoleInput] = useState("");
     const [newREPLEntry, setNewREPLEntry] = useState(false);
 
+    // Check if the user is a first time visitor
+    const FIRST_TIME_KEY = "firstTime";
+    const firstTime = getLocalStorage(FIRST_TIME_KEY);
+    const [currentPage, setCurrentPage] = useState(firstTime == null ? "welcome" : "home");
+    if (firstTime === null) {
+        //localStorage.setItem(FIRST_TIME_KEY, JSON.stringify("false"))
+        console.log()
+    }
+
+    function welcomed() {
+        localStorage.setItem(FIRST_TIME_KEY, JSON.stringify(false));
+        setCurrentPage("home");
+    }
+
     // BUG: Generate unique IDs (generator or editor name)
     // so we can later delete REPLs
 
@@ -147,8 +162,13 @@ function App() {
             <ChromeCheck
                 className={validBrowser ? "hidden" : ""}
             />
+
+            <Welcome
+                className={currentPage === "welcome" ? "" : "hidden"}
+                welcomed={welcomed}
+            />
             
-            <div className={validBrowser ? "" : "hidden"}>
+            <div className={validBrowser && (currentPage === "home") ? "" : "hidden"}>
                 <Header />
                     <div className="absolute right-4 top-4">
                         <Settings 
@@ -160,7 +180,7 @@ function App() {
                                 setActiveIDE(curIDE);
                             }}
                             clearConsole={
-                                setConsoleOutput
+                                () => setConsoleOutput("")
                             }
                             
                         />

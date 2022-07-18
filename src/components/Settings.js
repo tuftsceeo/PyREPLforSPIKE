@@ -115,15 +115,6 @@ function Settings(props) {
             <Divider />
             <ListItem >
                 <ListItemText
-                    primary="Enable Dark Mode"
-                    secondary="Coming Soon!"
-                />
-                <Checkbox
-                />
-            </ListItem>
-            <Divider />
-            <ListItem >
-                <ListItemText
                     primary="Clear Console Output"
                 />
                 <Button 
