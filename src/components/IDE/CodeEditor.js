@@ -8,7 +8,6 @@ import Settings from "@mui/icons-material/Settings";
 function CodeEditor(props) {
 
     //const [curCode, setCurCode] = useState(initCode);
-    console.log(props.settings.fontSize);
     const [editorSettings, setEditorSettings] = useState(props.settings);
 
     return (        

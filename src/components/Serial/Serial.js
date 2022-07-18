@@ -368,20 +368,6 @@ function Serial(props) {
                     }
                 }, 10);
             }
-
-            /*
-            else if (event.ctrlKey) {
-                console.log(event.key)
-                setTimeout(() => {
-                    if (props.newREPLEntry) {
-                        props.setNewREPLEntry(false);
-                        writeToPort(TAB);
-                        console.log(props.consoleInput);
-                        props.setConsoleInput("")
-                    }
-                }, 10);
-            }
-            */
                 
         };
         window.addEventListener('keydown', handleEsc);

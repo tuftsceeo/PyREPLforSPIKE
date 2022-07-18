@@ -6,19 +6,16 @@ import React, {useEffect, useState, useRef} from "react";
 
 function ConsoleInput(props) {
 
-    const [upStack, setUpStack] = useState([]);
-    const [downStack, setDownStack] = useState([]);
+    const [upStack, setUpStack] = useState([""]);
+    const [downStack, setDownStack] = useState([""]);
 
     const ref = useRef(null);
     const TAB = '\x09'
 
     useEffect(() => {
         const keyDownHandler = event => {
-            console.log('User pressed: ', event.key);
-            
             
             if (event.key === 'Enter' && document.activeElement == ref.current) {
-                console.log(upStack)
                 event.preventDefault();
                 
                 setUpStack((prev) => {
@@ -36,14 +33,34 @@ function ConsoleInput(props) {
             }
             
             // Up/Down arrow implementation
-            else if (event.key === "ArrowUp" && upStack.length > 0) {
+            else if (event.key === "ArrowUp" && upStack != undefined &&  upStack.length > 0) {
                 event.preventDefault();
-                setDownStack((prev) => [...prev, props.consoleInput]);
+                setDownStack((prev) => {
+                    console.log(prev);
+                    return [...prev, props.consoleInput]
+                });
                 props.setConsoleInput(upStack[upStack.length - 1])
                 setUpStack((prev) => {
-                    prev.filter((element, index) => {
-                        return index != prev.length - 1
-                    })
+                    let prevArr = [...prev];
+                    prevArr.pop();
+                    return prevArr;
+                });
+                setTimeout(() => {
+                    console.log(upStack);
+                }, 1000);
+            }
+
+            else if (event.key === "ArrowDown" && downStack != undefined &&  downStack.length > 0) {
+                console.log(downStack);
+                event.preventDefault();
+                setUpStack((prev) => [...prev, props.consoleInput]);
+                props.setConsoleInput(downStack[downStack.length - 1])
+                setDownStack((prev) => {
+                    console.log(prev);
+                    let prevArr = [...prev];
+                    prevArr.pop();
+                    return prevArr;
+                    
                 })
             }
             
@@ -55,7 +72,7 @@ function ConsoleInput(props) {
         return () => {
           document.removeEventListener('keydown', keyDownHandler);
         };
-    }, []);
+    }, [props]);
     
 
     return (

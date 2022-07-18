@@ -24,7 +24,6 @@ import { browserName, browserVersion } from "react-device-detect";
 function App() {
     // Check if browser is valid -- chrome, edge, or opera
     function isValidBrowser(browser, version) {
-        console.log(version > 89)
         if ((browser === "Chrome" || browser === "Edge") && version > 89) {
             return true;
         }
