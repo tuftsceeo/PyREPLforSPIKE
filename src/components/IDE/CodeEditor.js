@@ -3,11 +3,9 @@ import React, { useState } from "react";
 import AceEditor from 'react-ace';
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-github";
-import Settings from "@mui/icons-material/Settings";
 
 function CodeEditor(props) {
 
-    //const [curCode, setCurCode] = useState(initCode);
     const [editorSettings, setEditorSettings] = useState(props.settings);
 
     return (        

@@ -31,8 +31,6 @@ function Console(props) {
                     </div>)
                 })}
 
-            
-            
             </div>
             <div>
                 <ConsoleInput 

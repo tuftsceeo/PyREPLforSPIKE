@@ -1,55 +1,24 @@
 import React, {useState, useEffect} from "react";
 import SerialButton from "./SerialButton";
 import APIButton from "./APIButton";
+import MoreOptionsButton from "./MoreOptionsButton";
+
 import Tooltip from "@mui/material/Tooltip";
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import Fab from '@mui/material/Fab';
 
-
 const VENDOR_ID = 0x0694; // LEGO SPIKE Prime Hub
 
 let port = null;
 
-const CONTROL_A = '\x01'; // CTRL-A character 
-const CONTROL_B = '\x02'; // CTRL-B character
 const CONTROL_C = '\x03'; // CTRL-C character 
 const CONTROL_D = '\x04'; // CTRL-D character
 const CONTROL_E = '\x05'; // CTRL-E character
-const CONTROL_F = '\x06'; // CTRL-F character
 const ENTER = '\r\n' // NEWLINE character
 const TAB = '\x09' // TAB character
 
-// CONTROL + (letter) ASCII characters
-const CONTROL_KEYS = {
-    'a': '\x01',
-    'b': '\x02',
-    'c': '\x03',
-    'd': '\x04',
-    'e': '\x05',
-    'f': '\x06',
-    'g': '\x07',
-    'h': '\x08',
-    'i': '\x09',
-    'j': '\x0A',
-    'k': '\x0B',
-    'l': '\x0C',
-    'm': '\x0D',
-    'n': '\x0E',
-    'o': '\x0F',
-    'p': '\x10',
-    'q': '\x11',
-    'r': '\x12',
-    's': '\x13',
-    't': '\x14',
-    'u': '\x15',
-    'v': '\x16',
-    'w': '\x17',
-    'x': '\x18',
-    'y': '\x19',
-    'z': '\x1A',
-}
 
 const docsLink = "https://tufts-cr-for-lego.codingrooms.com/documentation/spike_prime_python_knowledge_base#top";
 
@@ -57,8 +26,9 @@ let isWriteInit = false;
 let textEncoder;
 let writableStreamClosed;
 
+let reader;
 let writer;
-
+let lockedReader = false;
 
 function Serial(props) {
 
@@ -87,14 +57,11 @@ function Serial(props) {
 
         if (port.readable) {
             return true;
-            
         }
         else {
             return false;
         }
     }
-
-    const [readSerialPort, setReadSerialPort] = useState(true);
 
     // Reads Data from the SPIKE Prime (Uint8Array Format)
     async function readPort() {
@@ -103,22 +70,23 @@ function Serial(props) {
         let inputDone = port.readable.pipeTo(decoder.writable);
         const inputStream = decoder.readable;
 
-        const reader = inputStream.getReader();
-        while (port.readable && readSerialPort) {
+        reader = inputStream.getReader();
+        lockedReader = true;
+        while (port.readable && lockedReader) {
             //const reader = port.readable.getReader();
             try {
                 while (true) {
-                const { value, done } = await reader.read();
-                if (done) {
-                    // |reader| has been canceled.
-                    break;
-                }
-                props.exportConsole(value);
+                    const { value, done } = await reader.read();
+                    if (done) {
+                        console.log("done!")
+                        break;
+                    }
+                    props.exportConsole(value);
                 }
             } catch (error) {
                 console.error(error);
             } finally {
-                reader.releaseLock();
+                //reader.releaseLock();
             }
         }
     }
@@ -129,6 +97,8 @@ function Serial(props) {
         writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
         writer = textEncoder.writable.getWriter();
     }
+
+    
 
     // Writes a string (or array of strings) to the SPIKE terminal
     async function writeToPort(lines) {
@@ -169,20 +139,51 @@ function Serial(props) {
         
     }
 
-    // Writes and reads code to/from serial port
+    // CTRL + C to enter REPL and starts reading from port
     async function startWebSerial() {
         if (await initWebSerial()) {
             await writeToPort([CONTROL_C]);
-
             setTimeout(async() => {
                 readPort()
             }, 250);
         }
-
     }
 
-    function closePort() {
-        port.close()
+    async function unlockStreams() {
+        reader.cancel();
+        //writer.releaseLock();
+        reader.closed.then(() => {
+            lockedReader = false;
+        });
+        /*
+        writer.closed.then(() => {
+            isWriteInit = false;
+        });
+        */
+       isWriteInit = false;
+        
+    }
+
+    // Unlocks streams and then closes the serial port
+    async function closePort() {
+        unlockStreams();
+        let interval = setInterval(() => {
+            if (!(lockedReader || isWriteInit)) {
+                port.close();
+                setSerialOn(false);
+                setConnectText(defaultDirections);
+                clearInterval(interval);
+
+                isWriteInit = false;
+                textEncoder = undefined;
+                writableStreamClosed = undefined;
+
+                reader = undefined;
+                writer = undefined;
+                lockedReader = false;
+            }
+        }, 100);
+
     }
     
     // Serial Port UI Component Hooks
@@ -194,28 +195,18 @@ function Serial(props) {
 
     // Changes functionality of serial port button once serial port is connected
     function serialButtonConnected() {
-        let checkConnectionInterval;
-        setTimeout(() => {
-            checkConnectionInterval = setInterval(() => {
-                if (port.readable) {
-                    setSerialOn(true);
-                    setConnectText(activeSerialDirections);
-                }
-                else if (port === null || port === undefined ||  !port.readable) {
-                    //clearInterval(checkConnectionInterval);
-                    setSerialOn(false);
-                    setConnectText(defaultDirections)
-
-                }
-                
-            }, 1000);
-        }, 500);
+        setSerialOn(true);
+        setConnectText(activeSerialDirections);
+        port.addEventListener('disconnect', event => {
+            setSerialOn(false);
+            setConnectText(defaultDirections)
+        });
         
     }
 
     // Attempts a WebSerial Connection (associated with button press)
-    function connectToSPIKE() {
-        startWebSerial(); 
+    async function connectToSPIKE() {
+        await startWebSerial(); 
         serialButtonConnected();
     }
 
@@ -230,39 +221,7 @@ function Serial(props) {
             console.log(currentCode)
         }
 
-        // Old code that ran user input line by line
-        /*
-
-        // Adds appropriate spaces at end of code to
-        // make sure the Python interpreter knows to run
-        // the code.
-        //let currentCode = props.getCurrentCode();
-        // Windows adds an extra \r along with \n
-        let codeArray = currentCode.split("\n");
-        
-        codeArray = stripComments(codeArray);
-
-
-        let indentedCodeArray = [];
-        for (let i = 0; i < codeArray.length; i++) {
-            let codeBlockObj = processCodeLine(codeArray, i);
-
-            i = codeBlockObj.newLineNumber;
-            let blockToWrite = codeBlockObj.codeBlock;
-
-            // If code has indent, enter paste mode and insert block using
-            // CTRL-E and CRTL-D
-            if (blockToWrite.length > 1) {
-                indentedCodeArray.push(...blockToWrite);
-                i--;
-            }
-            else {
-                indentedCodeArray.push(...blockToWrite);
-                indentedCodeArray.push("\r\n");
-            }
-            
-        }
-        */
+        // Old code removed
 
         // Newer code to create a python file and run
         //currentCode = currentCode.replace('\r', '')
@@ -297,42 +256,23 @@ function Serial(props) {
 
     }
 
-    // Processes a block of code for interpretation by SPIKE
-    // If single line, it's simply written to the SPIKE REPL
-    // If it's a block (if, for, def), it's copy-pasted using paste mode
-    function processCodeLine(codeArray, lineNum) {
-        let curElement = codeArray[lineNum];
-        curElement = curElement.replace("\r", "");
-        curElement = curElement.replace("\t", "    ");
 
-        let blockToWrite = [curElement];
-        
-        // Detect if code block is ahead, enters block mode and saves
-        // the block as one string
-        if (curElement.trim().charAt(curElement.length - 1) === ":") {
-            lineNum++;
+    // Saves code in current editor to the SPIKE Prime as a file
+    function uploadCurrentCode() {
+        const code = props.getCurrentCode();
+        const fileName = props.getCurrentFileName();
+        writeToPort([CONTROL_C, CONTROL_E, 'code = """' + code + '"""\n', 'f = open("' + fileName + '", "w")\n', 'f.write(code)\n', 'f.close()\n', CONTROL_D])
 
-            blockToWrite.unshift(CONTROL_E);
-            //blockToWrite.push("\r\n");
+    }
 
-            while (lineNum < codeArray.length && 
-            (codeArray[lineNum].length === 0 ||
-            codeArray[lineNum].substring(0,4) === "    "))
-            {
-                blockToWrite.push(codeArray[lineNum]);
-                blockToWrite.push("\r\n")
-                lineNum++;
-            }
-            blockToWrite.push(CONTROL_D)
-        }
+    function runCurrentFile() {
+        const fileName = props.getCurrentFileName();
+        writeToPort(["f = open('" + fileName + "')\r\n", "exec(f.read())\r\n", "f.close()\r\n"])
+    }
 
-        // Add a newline back into code to seperate colon statement from
-        // indented block
-        
-        return ({
-            codeBlock: blockToWrite,
-            newLineNumber: lineNum
-        });
+    function writeAndRunCode() {
+        uploadCurrentCode();
+        runCurrentFile();
     }
 
     // When CRTL + ENTER is pressed, code is run
@@ -403,7 +343,6 @@ function Serial(props) {
                             setTimeout(() => {
                                 writeToPort(CONTROL_C);
                             }, 1000);
-                           
                         }} 
                         color="warning" 
                         aria-label="add" 
@@ -428,6 +367,8 @@ function Serial(props) {
                 </Tooltip>
             </div>
 
+            
+
             <div className={!serialOn ? "hidden" : "mr-4"}>
                 <Tooltip title="Stop" placement="top">
                     <Fab 
@@ -445,6 +386,15 @@ function Serial(props) {
             </div>
 
             <APIButton link={docsLink} on={serialOn} color={"inherit"} />
+
+            <MoreOptionsButton 
+                className={!serialOn ? "hidden" : "mx-4"}
+                uploadCode={() => {uploadCurrentCode()}}
+                runCurrentCode={() => {runCurrentFile()}}
+                writeAndRunCode={() => {writeAndRunCode()}}
+            />
+
+
 
             
 

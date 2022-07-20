@@ -140,6 +140,10 @@ function App() {
         return editors[activeIDE].code;
     }
 
+    function getCurrentFileName() {
+        return "REPL_" + editors[activeIDE].name + ".py";
+    }
+
     // Saves code from an array to LocalStorage
     // Parameters
     function saveToLocalStorage(values, key) {
@@ -158,7 +162,7 @@ function App() {
 
     // Returns the entire App with all rendered components
     return (
-        <div>
+        <div className="-mb-4">
             <ChromeCheck
                 className={validBrowser ? "hidden" : ""}
             />
@@ -192,6 +196,7 @@ function App() {
                         <div>
                             <Serial 
                                 getCurrentCode={getCurrentCode} 
+                                getCurrentFileName={getCurrentFileName}
                                 exportConsole={pipeOutputToConsole} 
                                 newREPLEntry={newREPLEntry}
                                 setNewREPLEntry={setNewREPLEntry}

@@ -10,7 +10,13 @@ function ConsoleInput(props) {
     const [downStack, setDownStack] = useState([""]);
 
     const ref = useRef(null);
-    const TAB = '\x09'
+    const TAB = '\x09';
+
+    function resetStack(upStack, downStack) {
+        setUpStack((prev) => {
+
+        })
+    }
 
     useEffect(() => {
         const keyDownHandler = event => {
@@ -23,6 +29,7 @@ function ConsoleInput(props) {
                 });
                 
                 props.setNewREPLEntry(true);
+                //resetStack(setUpStack, setDownStack);
             }
             
 
@@ -91,15 +98,11 @@ function ConsoleInput(props) {
                 id="consoleInput"
                 onChange={(event) => {
                     const newInput = event.target.value;
-                    if (event.key === 'Enter') {
-                        window.location.href("https://google.com")
-                    }
                     props.setConsoleInput(newInput);
                 }} 
                 variant="filled"
                 value={props.consoleInput}
                 inputRef={ref}
-                
             />
             </Box>
         </div>
