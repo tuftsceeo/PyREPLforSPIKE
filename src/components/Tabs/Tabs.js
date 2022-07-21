@@ -2,7 +2,10 @@ import React, {useState, useEffect} from "react";
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Tab from "./Tab";
 
-import TextPopup from "./TextPopup";
+import AddTextPopup from "./AddTextPopup";
+import DeleteTextPopup from "./DeleteTextPopup";
+
+import { FILE_PREFIX, FILE_SUFFIX } from "../App";
 
 
 function Tabs(props) {
@@ -66,6 +69,24 @@ function Tabs(props) {
         props.switchIDE(tabs.length);
     }
 
+    function removeTab(tabName) {
+        switchTabs(0);
+        props.switchIDE(0);
+        setTabs((prev) => {
+            let newTabs = [];
+            prev.forEach(element => {
+                if (FILE_PREFIX + element.name + FILE_SUFFIX !== tabName) {
+                    newTabs.push(element);
+                }
+            });
+            return newTabs;
+        })
+        props.deleteREPL(tabName)
+        setTimeout(() => {
+            console.log(tabs);
+        }, 1000);
+    }
+
 
     function getLocalStorage() {
         return localStorage.getItem(LOCALSTORAGE_KEY);
@@ -89,7 +110,7 @@ function Tabs(props) {
         return () => {
             window.removeEventListener('keydown', handleIDESwitch);
         };
-    }, []);
+    }, [tabs]);
 
     return (
         <div>
@@ -98,13 +119,23 @@ function Tabs(props) {
                     {
 
                         tabs.map((tab, index) => {
-                            return (<Tab key={index} id={index} color={tab.color} outlined={tab.outlined} name={tab.name} onClick={() => {switchTabs(index)}} />)
+                            return (
+                            <Tab 
+                                key={index} 
+                                id={index} 
+                                color={tab.color} 
+                                outlined={tab.outlined} 
+                                name={tab.name} 
+                                onClick={() => {switchTabs(index)}} 
+                            />)
                         })
                     }
                     
                 </ButtonGroup>
-                <div className="mx-4">
-                    <TextPopup formTitle="Create a new REPL" formBody="Enter a name for your new REPL environment: " addREPL={addTab} />
+                <div className="mx-4 flex">
+                    <AddTextPopup formTitle="Create a new REPL" formBody="Enter a name for your new REPL environment: " addREPL={addTab} className="mr-4" />
+                    <DeleteTextPopup formTitle={"Delete " + props.fileName } formBody="Your code from this REPL will be permanently deleted" deleteREPL={removeTab}
+                    fileName={props.fileName} />
                 </div>
                 
             </div>

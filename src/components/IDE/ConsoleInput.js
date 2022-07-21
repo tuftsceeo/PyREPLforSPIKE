@@ -10,7 +10,6 @@ function ConsoleInput(props) {
     const [downStack, setDownStack] = useState([""]);
 
     const ref = useRef(null);
-    const TAB = '\x09';
 
     function resetStack(upStack, downStack) {
         setUpStack((prev) => {
@@ -34,13 +33,13 @@ function ConsoleInput(props) {
             
 
             // Handled in Serial.js
-            else if ((event.key === "Tab" || event.key == "Control") && document.activeElement == ref.current) {
+            else if ((event.key === "Tab" || event.key === "Control") && document.activeElement == ref.current) {
                 event.preventDefault();
                 props.setNewREPLEntry(true);
             }
             
             // Up/Down arrow implementation
-            else if (event.key === "ArrowUp" && upStack != undefined &&  upStack.length > 0) {
+            else if (event.key === "ArrowUp" && upStack !== undefined &&  upStack.length > 0) {
                 event.preventDefault();
                 setDownStack((prev) => {
                     console.log(prev);
@@ -57,7 +56,7 @@ function ConsoleInput(props) {
                 }, 1000);
             }
 
-            else if (event.key === "ArrowDown" && downStack != undefined &&  downStack.length > 0) {
+            else if (event.key === "ArrowDown" && downStack !== undefined &&  downStack.length > 0) {
                 console.log(downStack);
                 event.preventDefault();
                 setUpStack((prev) => [...prev, props.consoleInput]);

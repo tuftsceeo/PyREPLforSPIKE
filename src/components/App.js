@@ -21,8 +21,13 @@ import Welcome from "./Welcome";
 
 import { browserName, browserVersion } from "react-device-detect";
 
+const FILE_PREFIX = "REPL_";
+const FILE_SUFFIX = ".py";
+export { FILE_PREFIX, FILE_SUFFIX };
 
 function App() {
+    
+
     // Check if browser is valid -- chrome, edge, or opera
     function isValidBrowser(browser, version) {
         if ((browser === "Chrome" || browser === "Edge") && version > 89) {
@@ -113,6 +118,20 @@ function App() {
         })
     }
 
+    function deleteREPL(editorName) {
+        setActiveIDE(0);
+        setEditors((prev) => {
+            return (prev.filter((element) => {
+                return (FILE_PREFIX + element.name + FILE_SUFFIX) !== editorName;
+            }))
+        });
+        setTimeout(() => {
+            saveToLocalStorage(editors, EDITOR_KEY);
+            console.log(editors)
+        }, 2000);
+        
+    }
+
     // pipeOutputToConsole(value)
     // 
     // Retrieves serial port output (read) and re-renders
@@ -141,7 +160,7 @@ function App() {
     }
 
     function getCurrentFileName() {
-        return "REPL_" + editors[activeIDE].name + ".py";
+        return FILE_PREFIX + editors[activeIDE].name + FILE_SUFFIX;
     }
 
     // Saves code from an array to LocalStorage
@@ -184,14 +203,20 @@ function App() {
                                 setActiveIDE(curIDE);
                             }}
                             clearConsole={
-                                () => setConsoleOutput("")
+                                () => setConsoleOutput(">>> ")
                             }
                             
                         />
                     </div>
                     <div className="grid grid-cols-2">
                         <div className="flex mx-2 justify-center">
-                            <Tabs switchIDE = {setActiveIDE} addREPL={addREPL} />
+                            <Tabs 
+                                switchIDE={setActiveIDE} 
+                                addREPL={addREPL} 
+                                fileName={getCurrentFileName()}
+                                deleteREPL={deleteREPL}
+
+                            />
                         </div>
                         <div>
                             <Serial 
@@ -202,6 +227,10 @@ function App() {
                                 setNewREPLEntry={setNewREPLEntry}
                                 consoleInput={consoleInput}
                                 setConsoleInput={setConsoleInput}
+                                editors={editors}
+                                clearConsole={
+                                    () => setConsoleOutput(">>> ")
+                                }
                             />
                         </div>
                     </div>

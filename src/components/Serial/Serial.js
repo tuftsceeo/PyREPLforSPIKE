@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from "react";
 import SerialButton from "./SerialButton";
 import APIButton from "./APIButton";
-import MoreOptionsButton from "./MoreOptionsButton";
 
 import Tooltip from "@mui/material/Tooltip";
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import Fab from '@mui/material/Fab';
+import SidebarMenu from "../SerialSidebar/SidebarMenu";
 
 const VENDOR_ID = 0x0694; // LEGO SPIKE Prime Hub
 
@@ -19,8 +19,7 @@ const CONTROL_E = '\x05'; // CTRL-E character
 const ENTER = '\r\n' // NEWLINE character
 const TAB = '\x09' // TAB character
 
-
-const docsLink = "https://tufts-cr-for-lego.codingrooms.com/documentation/spike_prime_python_knowledge_base#top";
+const docsLink = "https://spike3-docs.web.app/";
 
 let isWriteInit = false;
 let textEncoder;
@@ -67,6 +66,7 @@ function Serial(props) {
     async function readPort() {
         // eslint-disable-next-line no-undef
         let decoder = new TextDecoderStream();
+
         let inputDone = port.readable.pipeTo(decoder.writable);
         const inputStream = decoder.readable;
 
@@ -172,7 +172,7 @@ function Serial(props) {
                 port.close();
                 setSerialOn(false);
                 setConnectText(defaultDirections);
-                clearInterval(interval);
+                
 
                 isWriteInit = false;
                 textEncoder = undefined;
@@ -181,6 +181,7 @@ function Serial(props) {
                 reader = undefined;
                 writer = undefined;
                 lockedReader = false;
+                clearInterval(interval);
             }
         }, 100);
 
@@ -214,11 +215,8 @@ function Serial(props) {
         let currentCode = props.getCurrentCode()
 
         if (!currentCode.includes("\n")) {
-            writeToPort(currentCode);
+            writeToPort(currentCode + "\r\n");
             return;
-        }
-        else {
-            console.log(currentCode)
         }
 
         // Old code removed
@@ -273,6 +271,21 @@ function Serial(props) {
     function writeAndRunCode() {
         uploadCurrentCode();
         runCurrentFile();
+    }
+
+    function downloadTxtFile() {
+        const element = document.createElement("a");
+        const file = new Blob([props.getCurrentCode()], {
+          type: "text/plain"
+        });
+        element.href = URL.createObjectURL(file);
+        element.download = props.getCurrentFileName();
+        document.body.appendChild(element);
+        element.click();
+    }
+
+    function deleteFile(filePath) {
+        
     }
 
     // When CRTL + ENTER is pressed, code is run
@@ -387,11 +400,14 @@ function Serial(props) {
 
             <APIButton link={docsLink} on={serialOn} color={"inherit"} />
 
-            <MoreOptionsButton 
+            <SidebarMenu 
                 className={!serialOn ? "hidden" : "mx-4"}
                 uploadCode={() => {uploadCurrentCode()}}
                 runCurrentCode={() => {runCurrentFile()}}
                 writeAndRunCode={() => {writeAndRunCode()}}
+                currentCode={props.currentCode}
+                downloadTxtFile={() => downloadTxtFile()}
+                clearConsole={props.clearConsole}
             />
 
 
