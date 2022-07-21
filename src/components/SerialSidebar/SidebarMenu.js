@@ -16,10 +16,13 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 import { Fab, Tooltip } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import UploadFile from './UploadFile';
+
+import { CONTROL_D } from "../Serial/Serial";
 
 function SidebarMenu(props) {
   const [state, setState] = React.useState({
@@ -92,7 +95,17 @@ function SidebarMenu(props) {
             console.log("hello")
         },
         icon: <DeleteSweepIcon />
-    }
+    },
+
+    {
+      title: "Restart w/o CTRL C",
+      onClick: () => {
+          props.writeToPort([CONTROL_D])
+      },
+      icon: <RestartAltIcon />
+  },
+
+    
   ];
 
   const list = (anchor) => (

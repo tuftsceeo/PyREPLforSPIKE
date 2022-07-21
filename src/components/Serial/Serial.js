@@ -13,11 +13,11 @@ const VENDOR_ID = 0x0694; // LEGO SPIKE Prime Hub
 
 let port = null;
 
-const CONTROL_C = '\x03'; // CTRL-C character 
-const CONTROL_D = '\x04'; // CTRL-D character
-const CONTROL_E = '\x05'; // CTRL-E character
-const ENTER = '\r\n' // NEWLINE character
-const TAB = '\x09' // TAB character
+export const CONTROL_C = '\x03'; // CTRL-C character 
+export const CONTROL_D = '\x04'; // CTRL-D character
+export const CONTROL_E = '\x05'; // CTRL-E character
+export const ENTER = '\r\n' // NEWLINE character
+export const TAB = '\x09' // TAB character
 
 const docsLink = "https://spike3-docs.web.app/";
 
@@ -408,6 +408,7 @@ function Serial(props) {
                 currentCode={props.currentCode}
                 downloadTxtFile={() => downloadTxtFile()}
                 clearConsole={props.clearConsole}
+                writeToPort={writeToPort}
             />
 
 
