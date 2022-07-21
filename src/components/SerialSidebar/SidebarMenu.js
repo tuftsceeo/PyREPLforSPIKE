@@ -21,6 +21,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { Fab, Tooltip } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import UploadFile from './UploadFile';
+import DeleteFile from './DeleteFile';
 
 import { CONTROL_D } from "../Serial/Serial";
 
@@ -38,7 +39,8 @@ function SidebarMenu(props) {
   };
 
   const [openDialogs, setOpenDialogs] = React.useState({
-      executeLocalFile: false
+      executeLocalFile: false,
+      deleteFiles: false
   })
 
   const fileTabs = [
@@ -92,7 +94,12 @@ function SidebarMenu(props) {
     {
         title: "Delete Files",
         onClick: () => {
-            console.log("hello")
+          setOpenDialogs((prev) => {
+            return {
+              ...prev,
+              deleteFiles: true
+            }
+          })
         },
         icon: <DeleteSweepIcon />
     },
@@ -180,6 +187,23 @@ function SidebarMenu(props) {
             return {
               ...prev,
               executeLocalFile: false
+            }
+          })
+        }}
+      />
+
+      <DeleteFile
+        open={openDialogs.deleteFiles} 
+        closeDialog={(confirmed, fileName="") => {
+          console.log(confirmed)
+          console.log(fileName)
+          if (confirmed && fileName !== "") {
+            props.writeToPort(['import os\r\n', 'os.remove("' + fileName + '")\r\n'])
+          }
+          setOpenDialogs((prev) => {
+            return {
+              ...prev,
+              deleteFiles: false
             }
           })
         }}
