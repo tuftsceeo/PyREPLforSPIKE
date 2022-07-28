@@ -6,7 +6,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 function APIButton(props) {
     return (
-        <div className={props.on ? "" : "hidden"}>
+        <div className={props.className}>
             <Tooltip title="Documentation" placement="top">
                 <Fab 
                     onClick={() => {window.open(

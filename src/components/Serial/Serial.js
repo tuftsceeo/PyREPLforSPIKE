@@ -188,7 +188,7 @@ function Serial(props) {
     }
     
     // Serial Port UI Component Hooks
-    const defaultDirections = "SPIKE Not Connected, Connect Here: ";
+    const defaultDirections = "Device Not Connected, Connect Here: ";
     const activeSerialDirections = ""
     const [connectText, setConnectText] = useState(defaultDirections);
     const [serialOn, setSerialOn] = useState(false);
@@ -347,9 +347,10 @@ function Serial(props) {
                 getCurrentCode={props.getCurrentCode}
                 runCurrentCode={writeToPort}
             />
+            
 
             <div className={!serialOn ? "hidden" : "mx-4"}>
-                <Tooltip title="Restart SPIKE" placement="top">
+                <Tooltip title="Restart Device" placement="top">
                     <Fab 
                         onClick={async () => {
                             await writeToPort(CONTROL_D);
@@ -398,10 +399,8 @@ function Serial(props) {
                 </Tooltip>
             </div>
 
-            <APIButton link={docsLink} on={serialOn} color={"inherit"} />
-
             <SidebarMenu 
-                className={!serialOn ? "hidden" : "mx-4"}
+                className={!serialOn ? "hidden" : "mx-2"}
                 uploadCode={() => {uploadCurrentCode()}}
                 runCurrentCode={() => {runCurrentFile()}}
                 writeAndRunCode={() => {writeAndRunCode()}}
@@ -414,8 +413,9 @@ function Serial(props) {
 
 
             
-
+            <APIButton link={docsLink} className={"mx-4"} color={"inherit"} />
         </div>
+        
     )
 }
 

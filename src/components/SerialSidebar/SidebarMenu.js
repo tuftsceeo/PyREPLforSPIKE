@@ -45,7 +45,7 @@ function SidebarMenu(props) {
 
   const fileTabs = [
     {
-        title: "Upload Code to Hub",
+        title: "Upload Code to Device",
         onClick: () => {
             props.uploadCode();
         },
