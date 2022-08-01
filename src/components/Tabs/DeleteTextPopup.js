@@ -49,7 +49,7 @@ function DeleteTextPopup(props) {
         <div>
             <div className={props.fileName === MAIN_FILE ? "hidden" : ""}>
                 <DeleteButton onClick={() => handleOpen()} />
-                <Dialog open={open} onClose={handleClose}>
+                <Dialog open={open} onClose={() => handleClose(false)}>
                     <DialogTitle>{props.formTitle}</DialogTitle>
                     <DialogContent>
                         <DialogContentText>

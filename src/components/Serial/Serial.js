@@ -404,7 +404,9 @@ function Serial(props) {
                 uploadCode={() => {uploadCurrentCode()}}
                 runCurrentCode={() => {runCurrentFile()}}
                 writeAndRunCode={() => {writeAndRunCode()}}
-                currentCode={props.currentCode}
+                currentCode={() => {
+                    return props.getCurrentCode()
+                }}
                 downloadTxtFile={() => downloadTxtFile()}
                 clearConsole={props.clearConsole}
                 writeToPort={writeToPort}

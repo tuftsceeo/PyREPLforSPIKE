@@ -14,6 +14,7 @@ import TerminalIcon from '@mui/icons-material/Terminal';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import SaveIcon from '@mui/icons-material/Save';
 
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
@@ -22,8 +23,9 @@ import { Fab, Tooltip } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import UploadFile from './UploadFile';
 import DeleteFile from './DeleteFile';
+import SaveToSlot from "./SaveToSlot";
 
-import { CONTROL_D } from "../Serial/Serial";
+import { CONTROL_D, CONTROL_E } from "../Serial/Serial";
 
 function SidebarMenu(props) {
   const [state, setState] = React.useState({
@@ -40,7 +42,8 @@ function SidebarMenu(props) {
 
   const [openDialogs, setOpenDialogs] = React.useState({
       executeLocalFile: false,
-      deleteFiles: false
+      deleteFiles: false,
+      saveToSlot: false,
   })
 
   const fileTabs = [
@@ -66,7 +69,7 @@ function SidebarMenu(props) {
           props.downloadTxtFile();
       },
       icon: <FileDownloadIcon />
-  },
+    },
 
     {
         title: "Execute Local File",
@@ -79,7 +82,21 @@ function SidebarMenu(props) {
             })
         },
         icon: <FileOpenIcon />
-    }
+    },
+
+    {
+      title: "Save to Slot*",
+      onClick: () => {
+          setOpenDialogs((prev) => {
+            return {
+              ...prev,
+              saveToSlot: true
+            }
+          })
+      },
+      icon: <SaveIcon/>
+    },
+
   ]
 
   const consoleTabs = [
@@ -190,6 +207,20 @@ function SidebarMenu(props) {
             }
           })
         }}
+      />
+
+      <SaveToSlot
+        open={openDialogs.saveToSlot} 
+        closeDialog={(confirmed, slotPath) => {
+          if (confirmed)
+              props.writeToPort([CONTROL_E, 'f = open("' + slotPath + '", "w")\r\n', 'f.write("""' + props.currentCode() + '""")\r\n', 'f.close()\r\n', CONTROL_D]);
+          setOpenDialogs((prev) => {
+            return {
+              ...prev,
+              saveToSlot: false
+            }
+          })
+        }} 
       />
 
       <DeleteFile
