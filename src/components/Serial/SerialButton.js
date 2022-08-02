@@ -1,3 +1,12 @@
+/*
+ * SerialButton.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * UI Buttons to interact with various serial functions in Serial.js
+ * 
+ */ 
+
 import React from "react";
 import Fab from '@mui/material/Fab';
 import CableIcon from '@mui/icons-material/Cable';
