@@ -1,3 +1,14 @@
+/*
+ * SaveToSlot.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * IN PROGRESS - Popup for saving code to the hub
+ * Saves current code in the IDE editor to a slot as "NUMBER.py"
+ * where NUMBER is the input submitted in the popup form.
+ * 
+ */ 
+
 import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -6,8 +17,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-
-
 
 export default function SaveToSlot(props) {
     const [slot, setSlot] = useState(0);

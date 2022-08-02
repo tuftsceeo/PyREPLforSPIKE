@@ -1,3 +1,13 @@
+/*
+ * SidebarMenu.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * Sidebar that appears when the "more options" button is pressed in the IDE
+ * with options to manipulate the os filesystem.
+ * 
+ */ 
+
 // Initially taken from https://mui.com/material-ui/react-drawer/
 
 import React from 'react';
@@ -28,10 +38,12 @@ import SaveToSlot from "./SaveToSlot";
 import { CONTROL_D, CONTROL_E } from "../Serial/Serial";
 
 function SidebarMenu(props) {
+  // Tracks the current state of the sidebar
   const [state, setState] = React.useState({
     right: false
   });
 
+  // Opens and closes the sidebar
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
@@ -40,12 +52,15 @@ function SidebarMenu(props) {
     setState({ ...state, [anchor]: open });
   };
 
+  // Tracks the state of each popup
   const [openDialogs, setOpenDialogs] = React.useState({
       executeLocalFile: false,
       deleteFiles: false,
       saveToSlot: false,
   })
 
+  // Tabs in the sidebar and behaviors when they are clicked
+  // Split into two sections: "file" and "console"
   const fileTabs = [
     {
         title: "Upload Code to Device",
@@ -132,6 +147,7 @@ function SidebarMenu(props) {
     
   ];
 
+  // Renders all of the sidebar buttons as a list
   const list = (anchor) => (
     <Box
       sx={{ width: 250 }}

@@ -1,3 +1,13 @@
+/*
+ * DeleteFile.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * Popup that appears when the user selects the delete file option 
+ * in the sidebar. Deletes a specified file from the device filesystem.
+ * 
+ */ 
+
 import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -6,8 +16,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-
-
 
 export default function DeleteFile(props) {
     const [path, setPath] = useState("");

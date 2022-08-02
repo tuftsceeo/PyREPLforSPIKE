@@ -1,3 +1,16 @@
+/*
+ * UploadFile.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * In Progress - Popup that allows users to upload files directly 
+ * to the microprocessor device
+ * 
+ * Prompts the user to upload files from a local filesystem. 
+ * Uploaded files will be read and then sent to the microprocessor as files.
+ * 
+ */ 
+
 import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
