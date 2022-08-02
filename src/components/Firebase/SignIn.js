@@ -1,8 +1,15 @@
-import 'firebase/compat/auth';
+/*
+ * SignIn.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * Functions that allow users to login with Google or GitHub to the site
+ * 
+ */ 
 
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider  } from "firebase/auth";
-import { auth, user, googleProvider, githubProvider } from "./FirebaseApp";
+import 'firebase/compat/auth';
+import { signInWithPopup, GoogleAuthProvider, GithubAuthProvider  } from "firebase/auth";
+import { auth,  googleProvider, githubProvider } from "./FirebaseApp";
 
 
 export const signInWithGoogle = (callback) => {

@@ -1,11 +1,19 @@
+/*
+ * FirebaseApp.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * Firebase app services initialization and configuration management 
+ * 
+ */ 
+
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
-import  { useCollectionData } from 'react-firebase-hooks/firestore'
-import { getFirestore, doc, getDoc, setDoc, collection, query, orderBy, limit, Timestamp } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 import { initializeApp } from '@firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider  } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, GithubAuthProvider  } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBj_GV9lYp0Ky39SpLmeCC8bGVIlKJEmuA",
