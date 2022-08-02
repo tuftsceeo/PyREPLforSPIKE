@@ -1,3 +1,13 @@
+/*
+ * CodeEditor.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * Component for the main code editor the use can interact with
+ * Uses the react-ace editor 
+ * 
+ */ 
+
 
 import React, { useState } from "react";
 import AceEditor from 'react-ace';
@@ -6,6 +16,7 @@ import "ace-builds/src-noconflict/theme-github";
 
 function CodeEditor(props) {
 
+    // BUG: Why did I create a new state object for this?
     const [editorSettings, setEditorSettings] = useState(props.settings);
 
     return (        

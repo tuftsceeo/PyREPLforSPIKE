@@ -1,3 +1,11 @@
+/*
+ * ConsoleInput.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * Firebase app services initialization and configuration management 
+ * 
+ */ 
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -6,15 +14,14 @@ import React, {useEffect, useState, useRef} from "react";
 
 function ConsoleInput(props) {
 
+    // Console input state management, controls up/down arrow stacks
     const [upStack, setUpStack] = useState([""]);
     const [downStack, setDownStack] = useState([""]);
 
     const ref = useRef(null);
 
     function resetStack(upStack, downStack) {
-        setUpStack((prev) => {
-
-        })
+        console.log(upStack);
     }
 
     useEffect(() => {
@@ -28,21 +35,21 @@ function ConsoleInput(props) {
                 });
                 
                 props.setNewREPLEntry(true);
-                //resetStack(setUpStack, setDownStack);
+                resetStack(setUpStack, setDownStack);
             }
             
 
             // Handled in Serial.js
-            else if ((event.key === "Tab" || event.key === "Control") && document.activeElement == ref.current) {
+            // Triggers tab key REPL input if tab is pressed inside the text box
+            else if ((event.key === "Tab") && document.activeElement == ref.current) {
                 event.preventDefault();
                 props.setNewREPLEntry(true);
             }
             
-            // Up/Down arrow implementation
+            // Up arrow implementation
             else if (event.key === "ArrowUp" && upStack !== undefined &&  upStack.length > 0) {
                 event.preventDefault();
                 setDownStack((prev) => {
-                    console.log(prev);
                     return [...prev, props.consoleInput]
                 });
                 props.setConsoleInput(upStack[upStack.length - 1])
@@ -51,22 +58,18 @@ function ConsoleInput(props) {
                     prevArr.pop();
                     return prevArr;
                 });
-                setTimeout(() => {
-                    console.log(upStack);
-                }, 1000);
+                
             }
 
+            // Down arrow implementation
             else if (event.key === "ArrowDown" && downStack !== undefined &&  downStack.length > 0) {
-                console.log(downStack);
                 event.preventDefault();
                 setUpStack((prev) => [...prev, props.consoleInput]);
                 props.setConsoleInput(downStack[downStack.length - 1])
                 setDownStack((prev) => {
-                    console.log(prev);
                     let prevArr = [...prev];
                     prevArr.pop();
                     return prevArr;
-                    
                 })
             }
             
@@ -81,6 +84,7 @@ function ConsoleInput(props) {
     }, [props]);
     
 
+    // Text box for console input
     return (
         <div className={"flex justify-start my-2"} >
             <Box

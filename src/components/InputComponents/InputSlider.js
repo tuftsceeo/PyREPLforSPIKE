@@ -1,3 +1,13 @@
+/*
+ * InputSlider.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * Input Slider component to be inserted into various settings/input cases
+ * Mostly taken from MUI
+ * 
+ */ 
+
 import React, {useState} from "react";
 
 // Popup Imports
