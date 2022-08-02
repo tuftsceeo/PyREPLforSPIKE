@@ -14,11 +14,11 @@ PyREPL for SPIKE is a web-based platform to interact with the REPL on a LEGO SPI
 ### How to use PyREPL
 1. Open the [PyREPL Web App](https://pyrepl.web.app/) on a supported web browser.
     * Supported browsers: Google Chrome, Microsoft Edge, Opera.
-2. Connect your SPIKE Prime or other MicroPython device to PyREPL by clicking the red button on the upper right hand side of the window.
-    * The application currently supports wire (USB) and bluetooth connections. 
+2. Connect your MicroPython device to PyREPL by clicking the red button on the upper right hand side of the window.
+    * The application currently supports wire (USB) and some bluetooth connections. 
 3. Write MicroPython code using the text editor on the left half of the screen.
     * [Link to SPIKE Prime Documentation](https://tufts-cr-for-lego.codingrooms.com/documentation/spike_prime_python_knowledge_base#top)
-4. Run your code on SPIKE using the blue play button on the upper right hand side of the window.
+4. Run your code on the connected device using the blue play button on the upper right hand side of the window.
 
 <img src="https://github.com/tuftsceeo/PyREPLforSPIKE/blob/main/PyREPLTutorial.gif" alt ="PyREPL Tutorial" width=650 />
 
