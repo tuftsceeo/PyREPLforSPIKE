@@ -1,3 +1,12 @@
+/*
+ * ChromeCheck.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * A component to display if, the browser does not support PyREPL
+ * 
+ */ 
+
 function ChromeCheck(props) {
     return (
         <div className={props.className + " z-20"}>

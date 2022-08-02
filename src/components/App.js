@@ -1,12 +1,12 @@
 /*
  * App.js
  * By: Gabriel Sessions
- * Last Edit: 6/24/2022
+ * Last Edit: 8/2/2022
  * 
  * Main Application File for PyREPL
  * 
- * Controls information flow from the Editor to the Serial Port
- * and from the Serial Port to the User Interface
+ * Controls information flow from the Editor/Console Input to the Serial Port
+ * and from the Serial Port to the Console
  * 
  */ 
 
@@ -21,14 +21,18 @@ import Welcome from "./Welcome";
 
 import { browserName, browserVersion } from "react-device-detect";
 
-const FILE_PREFIX = "REPL_";
-const FILE_SUFFIX = ".py";
+const FILE_PREFIX = "REPL_"; // Prefix for all REPL files saved to hub
+const FILE_SUFFIX = ".py"; // Can also be .mpy
 export { FILE_PREFIX, FILE_SUFFIX };
 
 function App() {
     
-
-    // Check if browser is valid -- chrome, edge, or opera
+    /**
+     * Check if browser is valid
+     * @param {string} browser - Name of the browser in use
+     * @param {number} version - Version number of the browser in use
+     * @returns A boolean indicating if the site can suppport the user's browser
+     */
     function isValidBrowser(browser, version) {
         if ((browser === "Chrome" || browser === "Edge") && version > 89) {
             return true;
@@ -46,7 +50,8 @@ function App() {
     const EDITOR_KEY = "appData";
     const SETTINGS_KEY = "settingsData"
 
-    // Settings Initialization
+    // Settings Initialization, may require tweaking based on 
+    // screen height/width
     let settingsInitialValue = null;
     const settingsLS = getLocalStorage(SETTINGS_KEY);
     if (settingsLS === null) {
@@ -82,32 +87,34 @@ function App() {
         });
     }
 
+    // User Interface state management
     const [editors, setEditors] = useState(editorInitialValue);
     const [activeIDE, setActiveIDE] = useState(0);
     const [consoleOutput, setConsoleOutput] = useState("");
-
     const [consoleInput, setConsoleInput] = useState("");
     const [newREPLEntry, setNewREPLEntry] = useState(false);
 
     // Check if the user is a first time visitor
     const FIRST_TIME_KEY = "firstTime";
     const firstTime = getLocalStorage(FIRST_TIME_KEY);
+    // If first time, show welcome page. Otherwise, show the main REPL page.
     const [currentPage, setCurrentPage] = useState(firstTime == null ? "welcome" : "home");
-    if (firstTime === null) {
-        //localStorage.setItem(FIRST_TIME_KEY, JSON.stringify("false"))
-        console.log()
-    }
 
+    /**
+     * Sets the current page to the home page once the user has been "welcomed".
+     * Sends user to main page for all future visits.
+     */
     function welcomed() {
         localStorage.setItem(FIRST_TIME_KEY, JSON.stringify(false));
         setCurrentPage("home");
     }
 
-    // BUG: Generate unique IDs (generator or editor name)
-    // so we can later delete REPLs
-
-    // AddREPL
-    // Adds a new editor to the editors array
+    /**
+     * Adds a new REPL tab with an empty code editor
+     * @param {string} newEditorName - Name for the newly created REPL Tab
+     * 
+     * Effects: Adds a new REPL to the end of the editors list
+     */
     function addREPL(newEditorName) {
         setEditors((prev) => {
             return ([...prev, {
@@ -118,6 +125,14 @@ function App() {
         })
     }
 
+    /**
+     * @param {string} editorName - Name of the REPL tab to delete.
+     * 
+     * Effects: Filters and removes a specified editor from the editors list.
+     * 
+     * Note: Deletion is not permanent until the user edits another tab. 
+     * Gives the user a chance to reload the page to recover the tab.
+     */
     function deleteREPL(editorName) {
         setActiveIDE(0);
         setEditors((prev) => {
@@ -125,6 +140,7 @@ function App() {
                 return (FILE_PREFIX + element.name + FILE_SUFFIX) !== editorName;
             }))
         });
+        // BUG: Why did I add this delay?
         setTimeout(() => {
             saveToLocalStorage(editors, EDITOR_KEY);
             console.log(editors)
@@ -132,21 +148,22 @@ function App() {
         
     }
 
-    // pipeOutputToConsole(value)
-    // 
-    // Retrieves serial port output (read) and re-renders
-    // the console with the read value.
-    //
-    // Parameter: A new string to add to the console
+    /**
+     * Retrieves serial port output (read) and re-renders the console 
+     * with the read value.
+     * @param {string} value - A new string to add to the console
+     */
     function pipeOutputToConsole(value) {
         setConsoleOutput((prev) => {
             return prev + value;
         })
     }
 
-
-    // Updates the code in the editor that is currently in use
-    // and saves the result to LocalStorage
+    /**
+     * Updates the code in the editor that is currently in use 
+     * and saves the result to LocalStorage
+     * @param {string} newCode - Code to insert into the current editor
+     */
     function editCurrentFile(newCode) {
         setEditors((prev) => {
             prev[activeIDE].code = newCode;
@@ -155,16 +172,28 @@ function App() {
         saveToLocalStorage(editors, EDITOR_KEY);
     }
 
+    /**
+     * Returns the code for the currently active editor
+     * @returns A string with the code of the current tab
+     */
     function getCurrentCode() {
         return editors[activeIDE].code;
     }
 
+    /**
+     * @returns The file name of the currently active tab 
+     * (includes file prefix and suffix)
+     */
     function getCurrentFileName() {
         return FILE_PREFIX + editors[activeIDE].name + FILE_SUFFIX;
     }
 
-    // Saves code from an array to LocalStorage
-    // Parameters
+    /**
+     * Saves the updated editor values to local storage
+     * @param {Array<any>} values - Array of values to be stored into a 
+     * JSON object based on index
+     * @param {string} key - Key to identify the created object in local storage
+     */
     function saveToLocalStorage(values, key) {
         let valuesJSON = {}
         values.forEach((element, index) => {
@@ -182,15 +211,20 @@ function App() {
     // Returns the entire App with all rendered components
     return (
         <div className="-mb-4">
+            {/* Shows an invalid browser error if using 
+            an unsupported browser */}
             <ChromeCheck
                 className={validBrowser ? "hidden" : ""}
             />
-
+            
+            {/* Shows a welcome message if the user hasn't 
+            visited PyREPL before */}
             <Welcome
                 className={validBrowser && (currentPage === "welcome") ? "" : "hidden"}
                 welcomed={welcomed}
             />
             
+            {/* Main PyREPL Page */}
             <div className={validBrowser && (currentPage === "home") ? "" : "hidden"}>
                 <Header />
                     <div className="absolute right-4 top-4">
@@ -208,8 +242,12 @@ function App() {
                             
                         />
                     </div>
+
+                    {/* Two column layout for the IDE.
+                    Editor options on the left, console options on the right. */}
                     <div className="grid grid-cols-2">
                         <div className="flex mx-2 justify-center">
+                            {/* Tabs for switching between editors */}
                             <Tabs 
                                 switchIDE={setActiveIDE} 
                                 addREPL={addREPL} 
@@ -219,6 +257,7 @@ function App() {
                             />
                         </div>
                         <div>
+                            {/* Serial connection options and manipulation */}
                             <Serial 
                                 getCurrentCode={getCurrentCode} 
                                 getCurrentFileName={getCurrentFileName}
@@ -235,6 +274,7 @@ function App() {
                         </div>
                     </div>
 
+                    {/* Displays the current editor and console data */}
                     {editors.filter((editor, index) => {
                             return index === activeIDE;
                         }).map((editor) => {

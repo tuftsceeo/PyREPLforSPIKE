@@ -1,11 +1,22 @@
+/*
+ * Welcome.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * Welcome page for first time site visitors
+ * 
+ */ 
+
+// UI imports
 import React, {useState} from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
-import ceeo from "../img/ceeo.png";
+// Firebase imports
 import { signInWithGoogle, signInWithGitHub } from "./Firebase/SignIn";
 
 
 function Welcome(props) {
+    // State mangement to display a warning to those using the site as a guest
     const [guestWarning, setGuestWarning] = useState(false);
 
     function handleOpen() {
@@ -19,13 +30,13 @@ function Welcome(props) {
         }
     }
 
-    const ratio = window.innerWidth / 200;
-
     return (
         <div className={props.className}>
             <h1 className="m-4 text-4xl font-semibold text-center">Welcome to Web PyREPL!</h1>
             <p className="text-center text-lg my-6">Please choose an account type to continue</p>
             <div className="grid grid-cols-2">
+                
+                {/* Guest Login */}
                 <div className="p-2 m-4">
                     <div className="mb-8">
                         <h3 className="text-xl text-center block">Continue as a Guest user</h3>
@@ -36,7 +47,7 @@ function Welcome(props) {
                     </div>
                 </div>
                 
-
+                {/* Google/GitHub Login */}
                 <div className="p-2 m-4">
                     <div className="mb-8">
                         <h3 className="text-xl text-center block">Sign In with Google or GitHub</h3>
@@ -64,19 +75,8 @@ function Welcome(props) {
                     
                 </div>
             </div>
-            <div className="">
-                <a className="flex justify-center my-12" href="https://ceeo.tufts.edu/" alt="Tufts CEEO Website">
-                    {/*
-                    <img 
-                        src={ceeo}  
-                        alt="Tufts Center for Engineering Education and Outreach" 
-                        style={{maxWidth: "35%", height: "auto"}}
-                        className=""
-                    />
-                    */}
-                </a>
-                
-            </div>
+            
+            {/* Code backups warning */}
             <Dialog
                 open={guestWarning}
                 onClose={() => handleClose(false)}

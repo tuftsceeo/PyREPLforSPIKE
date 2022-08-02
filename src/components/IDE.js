@@ -1,3 +1,15 @@
+/*
+ * IDE.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * Combined Editor and Console component
+ * 
+ * Controls the relative layout of the console and editor with repect to each
+ * other in a two-column layout
+ * 
+ */ 
+
 import React from "react";
 import CodeEditor from "./IDE/CodeEditor";
 import Console from "./IDE/Console";

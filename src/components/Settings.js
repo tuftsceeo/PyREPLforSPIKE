@@ -1,3 +1,14 @@
+/*
+ * Settings.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * Settings page triggered by clicking the gear icon in the upper-right corner
+ * 
+ * Controls the global site settings.
+ * 
+ */ 
+
 import React, {useState} from "react";
 import InputSlider from "./InputComponents/InputSlider";
 
@@ -20,46 +31,55 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 
+// User input imports
 import { styled } from '@mui/material/styles';
 import MuiInput from '@mui/material/Input';
-
-// Checkbox Import
-import Checkbox from '@mui/material/Checkbox';
 
 // Clear Console Button icon
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Snackbar } from "@mui/material";
 
 
-
+// Slide up transition when the settings button is clicked
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Input = styled(MuiInput)`
-  width: 48px;
-`;
-
 function Settings(props) {
+    // Settings state management
     const [open, setOpen] = useState(false);
     const [snackOpen, setSnackOpen] = useState(false);
     const [snackMessage, setSnackMessage] = useState("")
 
+    /**
+     * Opens a snackbar in the lower left of the screen with a message
+     * @param {string} message - Text to be displayed inside the snackbar
+     */
     function openSnack(message) {
         setSnackMessage(message);
         setSnackOpen(true);
     }
 
+    /**
+     * Closes the snackbar, if displayed
+     */
     function closeSnack() {
         setSnackOpen(false);
     }
 
+    // BUG: Why does this variable exist?
     const tempSettings = props.settings
 
+    /**
+     * Opens the settings menu
+     */
     const handleClickOpen = () => {
         setOpen(true);
     };
 
+    /**
+     * Closes the settings menu and updates the global settings
+     */
     const handleClose = () => {
         setOpen(false);
         props.onSettingsUpdate()
@@ -67,6 +87,7 @@ function Settings(props) {
 
     return (
     <div>
+        {/* Settings button to trigger settings menu */}
         <div>
             <Tooltip title="Settings" placement="left">
                 <Fab 
@@ -79,6 +100,8 @@ function Settings(props) {
                 </Fab>
             </Tooltip>
         </div>
+
+        {/* Main Settings Menu */}
         <Dialog
         fullScreen
         open={open}
@@ -87,25 +110,26 @@ function Settings(props) {
         >
         <AppBar sx={{ position: 'relative' }}>
             <Toolbar>
-            <IconButton
-                edge="start"
-                color="inherit"
-                onClick={handleClose}
-                aria-label="close"
-            >
-                <CloseIcon />
-            </IconButton>
+                {/* "X" Button to close the settings menu */}
+                <IconButton
+                    edge="start"
+                    color="inherit"
+                    onClick={handleClose}
+                    aria-label="close"
+                >
+                    <CloseIcon />
+                </IconButton>
+
+            {/* Settings menu title */}
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                 Settings
             </Typography>
-            {/*
-            <Button autoFocus color="inherit" onClick={handleSave}>
-                Save
-            </Button>
-            */}
             </Toolbar>
+
+        {/* Settings body */}
         </AppBar>
         <List>
+            {/* Font Size */}
             <InputSlider 
                 input={tempSettings.fontSize}
                 onChange={(newFontSize) => {
@@ -114,6 +138,7 @@ function Settings(props) {
             />
             <Divider />
             <ListItem >
+                {/* Clear Console Button */}
                 <ListItemText
                     primary="Clear Console Output"
                 />
@@ -131,6 +156,7 @@ function Settings(props) {
             </ListItem>
         </List>
         </Dialog>
+
         <Snackbar
             open={snackOpen}
             autoHideDuration={5000}
@@ -138,10 +164,7 @@ function Settings(props) {
             message={snackMessage}
         />
     </div>
-    );
-    
-        
-    
+    );  
 }
 
 export default Settings;
