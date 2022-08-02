@@ -1,3 +1,12 @@
+/*
+ * AddTextPopup.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * Popup that allows the user to enter a name to create a new REPL tab/editor
+ * 
+ */
+
 import React, {useState} from "react";
 
 import AddButton from "./AddButton";
@@ -11,6 +20,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Snackbar from "@mui/material/Snackbar";
 
 function AddTextPopup(props) {
+    // State management
     const [open, setOpen] = useState(false);
     const [snackOpen, setSnackOpen] = useState(false);
     const [input, setInput] = useState("");
@@ -21,6 +31,14 @@ function AddTextPopup(props) {
         setOpen(true);
     }
 
+    /**
+     * Creates a new REPL tab if the popup is confirmed and has a non-empty
+     * REPL name.
+     * 
+     * @param {boolean} confirmed - True if the confirm button is pressed,
+     * false otherwise
+     * @param {string} submissionText - Name of the new REPL to be created
+     */
     function handleClose(confirmed, submissionText = "") {
         setOpen(false);
         if (submissionText === "") {
@@ -37,11 +55,11 @@ function AddTextPopup(props) {
         
     }
 
+    // Snackbar management
     function openSnack(snackText) {
         setSnackbarMessage(snackText)
         setSnackOpen(true);
     }
-
     function closeSnack() {
         setSnackOpen(false);
     }

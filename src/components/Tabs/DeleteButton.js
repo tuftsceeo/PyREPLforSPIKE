@@ -1,8 +1,16 @@
+/*
+ * DeleteButton.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * Button to start the process of deleting an previously created REPL tab/editor
+ * 
+ */
+
 import React from "react"
 import Fab from '@mui/material/Fab';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip  from "@mui/material/Tooltip";
-
 
 function DeleteButton(props) {
 

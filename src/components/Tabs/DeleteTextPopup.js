@@ -1,3 +1,14 @@
+/*
+ * DeleteTextPopup.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * TODO: Combine with AddTextPopup to form generic component
+ * 
+ * Popup that allows the user to enter a name to create a new REPL tab/editor
+ * 
+ */
+
 import React, {useState} from "react";
 import { FILE_PREFIX, FILE_SUFFIX } from "../App";
 
@@ -24,6 +35,11 @@ function DeleteTextPopup(props) {
         setOpen(true);
     }
 
+    /**
+     * Triggers REPL deletion if the popup is confirmed
+     * @param {boolean} confirmed - True if delete button is selected,
+     * false otherwise
+     */
     function handleClose(confirmed) {
         setOpen(false);
         if (confirmed) {

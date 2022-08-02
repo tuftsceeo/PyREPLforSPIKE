@@ -1,3 +1,13 @@
+/*
+ * Tabs.js
+ * By: Gabriel Sessions
+ * Last Edit: 8/2/2022
+ * 
+ * Group of tabs above the text editor. Allows users to switch between editors
+ * and changes the currently active IDE.
+ * 
+ */
+
 import React, {useState, useEffect} from "react";
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Tab from "./Tab";
@@ -20,7 +30,7 @@ function Tabs(props) {
 
     const LOCALSTORAGE_KEY = "appData"; 
 
-    const ls = getLocalStorage()
+    const ls = getLocalStorage() // why does this exist? use App.js localstorage
     if (ls != null) {
         const lsJSON = JSON.parse(ls)
         Object.values(lsJSON).forEach((value, key) => {
@@ -35,9 +45,11 @@ function Tabs(props) {
         });
     }
 
-    
 
-    // Tab target corresponds to index in tabs array
+    /**
+     * Switches active editor to a new specified editor
+     * @param {number} tabTarget - tab target corresponds to index in tabs array
+     */
     function switchTabs(tabTarget){
         setTabs((prev) => {
             prev[activeTab].color = "inherit";
@@ -53,9 +65,12 @@ function Tabs(props) {
         
     }
 
+    /**
+     * Creates a new tab and editor and switches the active editor to the newly
+     * created editor.
+     * @param {string} tabName - name to initialize the newly created tab with
+     */
     function addTab(tabName) {
-        // Note: Color switching is delayed if tabs switched after add
-
         setTabs((prev) => {
             return ([...prev, {
                 color: "primary",
@@ -69,6 +84,10 @@ function Tabs(props) {
         props.switchIDE(tabs.length);
     }
 
+    /**
+     * Deletes a tab from the tab list
+     * @param {*} tabName 
+     */
     function removeTab(tabName) {
         switchTabs(0);
         props.switchIDE(0);
@@ -87,13 +106,14 @@ function Tabs(props) {
         }, 1000);
     }
 
-
+    // Todo: remove and integrate App.js LS function
     function getLocalStorage() {
         return localStorage.getItem(LOCALSTORAGE_KEY);
     }
 
 
     // 97 - 105 are keys for numbers 1-9
+    // Todo: Finish shortcut idea
     useEffect(() => {
         const key0 = 48; // key number for 0 number key
         const handleIDESwitch = (event) => {
