@@ -25,6 +25,8 @@ const VENDOR_ID = 0x0694; // LEGO SPIKE Prime Hub
 
 let port = null;
 
+export const CONTROL_A = '\x01'; // CTRL-A character
+export const CONTROL_B = '\x02'; // CTRL-A character
 export const CONTROL_C = '\x03'; // CTRL-C character 
 export const CONTROL_D = '\x04'; // CTRL-D character
 export const CONTROL_E = '\x05'; // CTRL-E character
@@ -194,6 +196,7 @@ function Serial(props) {
                 writer = undefined;
                 lockedReader = false;
                 clearInterval(interval);
+                
             }
         }, 100);
 
@@ -243,9 +246,13 @@ function Serial(props) {
             return;
         }
 
+        // Implement raw REPL with
+        // CTRL-A -> Code -> CTRL-D -> CTRL-B
+
         writeToPort(CONTROL_E)
         writeToPort(currentCode);
         writeToPort(CONTROL_D)
+        //writeToPort(CONTROL_B)
     }
 
     // Old Function, may be useful later
@@ -430,6 +437,8 @@ function Serial(props) {
                 </Tooltip>
             </div>
 
+            <APIButton link={docsLink} className={"mx-4"} color={"inherit"} />
+
             <SidebarMenu 
                 className={!serialOn ? "hidden" : "mx-2"}
                 uploadCode={() => {uploadCurrentCode()}}
@@ -443,7 +452,7 @@ function Serial(props) {
                 writeToPort={writeToPort}
             />
 
-            <APIButton link={docsLink} className={"mx-4"} color={"inherit"} />
+            
         </div>
         
     )

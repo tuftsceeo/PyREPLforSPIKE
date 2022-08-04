@@ -21,7 +21,7 @@ function ConsoleInput(props) {
     const ref = useRef(null);
 
     function resetStack(upStack, downStack) {
-        console.log(upStack);
+        //console.log(upStack);
     }
 
     useEffect(() => {

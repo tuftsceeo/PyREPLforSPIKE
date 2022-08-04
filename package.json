@@ -19,8 +19,7 @@
     "react-dropzone": "^14.2.2",
     "react-firebase-hooks": "^5.0.3",
     "react-scripts": "5.0.1",
-    "react-simple-code-editor": "^0.11.2",
-    "web-vitals": "^2.1.4"
+    "react-simple-code-editor": "^0.11.2"
   },
   "scripts": {
     "start": "react-scripts start",

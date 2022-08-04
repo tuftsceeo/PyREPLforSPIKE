@@ -227,9 +227,9 @@ function SidebarMenu(props) {
 
       <SaveToSlot
         open={openDialogs.saveToSlot} 
-        closeDialog={(confirmed, slotPath) => {
+        closeDialog={(confirmed, slot) => {
           if (confirmed)
-              props.writeToPort([CONTROL_E, 'f = open("' + slotPath + '", "w")\r\n', 'f.write("""' + props.currentCode() + '""")\r\n', 'f.close()\r\n', CONTROL_D]);
+              props.writeToPort([CONTROL_E, 'import os\r\n', 'os.chdir("/flash/'+ slot.split(".py")[0] +'/")\r\n', 'f = open("program.py", "w")\r\n', 'f.write("""' + props.currentCode() + '""")\r\n', 'f.close()\r\n', CONTROL_D]);
           setOpenDialogs((prev) => {
             return {
               ...prev,
