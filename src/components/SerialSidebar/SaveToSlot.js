@@ -48,7 +48,7 @@ export default function SaveToSlot(props) {
                 props.closeDialog(false)
             }}>Cancel</Button>
             <Button onClick={() => {
-                props.closeDialog(true, slot + ".py")
+                props.closeDialog(true, slot);
             }}>Save</Button>
             </DialogActions>
         </Dialog>
