@@ -1,7 +1,7 @@
 /*
  * Settings.js
  * By: Gabriel Sessions
- * Last Edit: 8/2/2022
+ * Last Edit: 8/12/2022
  * 
  * Settings page triggered by clicking the gear icon in the upper-right corner
  * 
@@ -32,8 +32,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 
 // User input imports
-import { styled } from '@mui/material/styles';
-import MuiInput from '@mui/material/Input';
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
 
 // Clear Console Button icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -49,7 +49,14 @@ function Settings(props) {
     // Settings state management
     const [open, setOpen] = useState(false);
     const [snackOpen, setSnackOpen] = useState(false);
-    const [snackMessage, setSnackMessage] = useState("")
+    const [snackMessage, setSnackMessage] = useState("");
+
+    const [alignment, setAlignment] = React.useState('spike3');
+
+    const handleChange = (event, newAlignment) => {
+        console.log(newAlignment)
+        setAlignment(newAlignment);
+    };
 
     /**
      * Opens a snackbar in the lower left of the screen with a message
@@ -154,6 +161,26 @@ function Settings(props) {
                 </Button>
                
             </ListItem>
+
+            <Divider />
+
+            {/* Documentation Button Link Change */}
+            <ListItem >
+                {/* Clear Console Button */}
+                <ListItemText
+                    primary="Documentation Button Link"
+                />
+                <ToggleButtonGroup
+                    color="primary"
+                    value={alignment}
+                    exclusive
+                    onChange={handleChange}
+                >
+                    <ToggleButton value="spike3">SPIKE 3</ToggleButton>
+                </ToggleButtonGroup>
+               
+            </ListItem>
+
         </List>
         </Dialog>
 
