@@ -26,9 +26,10 @@ PyREPL for SPIKE is a web-based platform to interact with the REPL on a LEGO SPI
 ### How to modify PyREPL:
 Note: PyREPL was built using [React](https://reactjs.org/)
 1. Download Code
-2. Open PyREPLforSPIKE in a terminal and run ```npm install```. Requires [NodeJS](https://nodejs.org/en/)
-3. To start the development server, run ```npm start```.
-4. To build a production version of the project, run ```npm run build```.
+2. In a command prompt/terminal, change the working directory (cd) to the PyREPLforSPIKE directory. For example, if saved the code inside your Downloads folder, the command would be ```cd Downloads/PyREPLforSPIKE```
+3. Run ```npm install```. Requires [NodeJS](https://nodejs.org/en/). Run ```npm --version``` to check if you have NodeJS installed.
+4. To start the development server, run ```npm start```. You're now ready to start editing the project!
+5. When you have a production ready version ready to be published run ```npm run build``` to make a static production build.
 
 
 ---
