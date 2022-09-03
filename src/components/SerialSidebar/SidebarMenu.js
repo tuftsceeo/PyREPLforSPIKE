@@ -1,7 +1,7 @@
 /*
  * SidebarMenu.js
  * By: Gabriel Sessions
- * Last Edit: 8/2/2022
+ * Last Edit: 9/3/2022
  * 
  * Sidebar that appears when the "more options" button is pressed in the IDE
  * with options to manipulate the os filesystem.
@@ -25,6 +25,7 @@ import FileOpenIcon from '@mui/icons-material/FileOpen';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import SaveIcon from '@mui/icons-material/Save';
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
@@ -34,8 +35,12 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import UploadFile from './UploadFile';
 import DeleteFile from './DeleteFile';
 import SaveToSlot from "./SaveToSlot";
+import HubSetup from './HubSetup';
 
-import { CONTROL_D, CONTROL_E } from "../Serial/Serial";
+import { CONTROL_A, CONTROL_B, CONTROL_D, CONTROL_E } from "../Serial/Serial";
+import getScript from './setup_script';
+
+
 
 function SidebarMenu(props) {
   // Tracks the current state of the sidebar
@@ -57,6 +62,7 @@ function SidebarMenu(props) {
       executeLocalFile: false,
       deleteFiles: false,
       saveToSlot: false,
+      hubSetup: false
   })
 
   // Tabs in the sidebar and behaviors when they are clicked
@@ -97,6 +103,19 @@ function SidebarMenu(props) {
             })
         },
         icon: <FileOpenIcon />
+    },
+
+    {
+      title: "Setup Hub*",
+      onClick: () => {
+          setOpenDialogs((prev) => {
+            return {
+              ...prev,
+              hubSetup: true
+            }
+          })
+      },
+      icon: <AppRegistrationIcon />
     },
 
     {
@@ -237,6 +256,33 @@ function SidebarMenu(props) {
             }
           })
         }} 
+      />
+
+      <HubSetup 
+        open={openDialogs.hubSetup} 
+        closeDialog={async (confirmed, hubName="") => {
+          console.log(confirmed)
+          console.log(hubName)
+          if (confirmed && hubName !== "") {
+            const script = getScript(hubName);
+            await props.writeToPort([CONTROL_E])
+            
+            script.forEach(element => {
+              props.writeToPort(element + "\r\n");
+            });
+
+            await props.writeToPort([CONTROL_D])
+            
+            
+            
+          }
+          setOpenDialogs((prev) => {
+            return {
+              ...prev,
+              hubSetup: false
+            }
+          })
+        }}
       />
 
       <DeleteFile
