@@ -1,4 +1,4 @@
-export default function getScript(hubName){
+export function getScriptFunctions(){
     const scriptLines = `import os, sound
 
 ROOT = "/flash"
@@ -565,12 +565,16 @@ def setup(hubName):
     # Step 5: Load other default Programs
     addHeartProgram(0)
     
-    
-sound.beepPlay(500, 125)
-setup("SPIKE")
-changeHubName("${hubName}")
-sound.beepPlay(750, 125)`;
+`;
 
     return scriptLines.split("\n")
 
 } 
+
+
+export function getScriptExecute(hubName) {
+    const scriptExecute = `sound.beepPlay(500, 125)
+setup("${hubName}")
+sound.beepPlay(750, 125)`
+    return scriptExecute.split('\n');
+}

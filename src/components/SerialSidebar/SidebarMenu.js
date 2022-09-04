@@ -38,7 +38,7 @@ import SaveToSlot from "./SaveToSlot";
 import HubSetup from './HubSetup';
 
 import { CONTROL_A, CONTROL_B, CONTROL_D, CONTROL_E } from "../Serial/Serial";
-import getScript from './setup_script';
+import {getScriptFunctions, getScriptExecute} from './setup_script';
 
 
 
@@ -264,14 +264,27 @@ function SidebarMenu(props) {
           console.log(confirmed)
           console.log(hubName)
           if (confirmed && hubName !== "") {
-            const script = getScript(hubName);
+            const scriptFunctions = getScriptFunctions();
+            const scriptExecute = getScriptExecute(hubName);
             await props.writeToPort([CONTROL_E])
             
-            script.forEach(element => {
+            scriptFunctions.forEach(element => {
               props.writeToPort(element + "\r\n");
             });
+            setTimeout(() => {
+              scriptFunctions.forEach(element => {
+                props.writeToPort(element + "\r\n");
+              });
+              setTimeout(() => {
+                scriptExecute.forEach((element) => {
+                  props.writeToPort(element + "\r\n");
+                });
+                props.writeToPort([CONTROL_D])
+              }, 1000);
+            }, 1000);
+            
 
-            await props.writeToPort([CONTROL_D])
+            
             
             
             
