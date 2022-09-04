@@ -33,16 +33,13 @@ function App() {
      * @param {number} version - Version number of the browser in use
      * @returns A boolean indicating if the site can suppport the user's browser
      */
-    function isValidBrowser(browser, version) {
-        if ((browser === "Chrome" || browser === "Edge") && version > 89) {
-            return true;
-        }
-        else if (browser === "Opera" && version > 75) {
+    function isValidBrowser() {
+        if (navigator.serial !== undefined) {
             return true;
         }
         return false;
     }
-    const validBrowser = isValidBrowser(browserName, browserVersion);
+    const [validBrowser, setValidBrowser] = useState(isValidBrowser());
 
     // Initialization Code
     // Calls saved editor data from LocalStorage, if avaliable
@@ -215,6 +212,7 @@ function App() {
             an unsupported browser */}
             <ChromeCheck
                 className={validBrowser ? "hidden" : ""}
+                override={() => {setValidBrowser(true)}}
             />
             
             {/* Shows a welcome message if the user hasn't 
